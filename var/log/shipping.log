@@ -1,0 +1,22 @@
+[2020-08-21 07:20:13] main.DEBUG: array (
+  'request' => '<?xml version="1.0" encoding="UTF-8"?>
+<req:KnownTrackingRequest xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dhl.com TrackingRequestKnown-1.0.xsd" schemaVersion="1.0"><Request xmlns=""><ServiceHeader xmlns=""><MessageTime>2020-08-21T07:20:10+00:00</MessageTime><MessageReference>MAGE_TRCK_5f3f75aab06a6648728763</MessageReference><SiteID>****</SiteID><Password>****</Password></ServiceHeader></Request><LanguageCode xmlns="">EN</LanguageCode><AWBNumber xmlns="">45412121212121</AWBNumber><LevelOfDetails xmlns="">ALL_CHECK_POINTS</LevelOfDetails></req:KnownTrackingRequest>
+',
+  'result' => '<?xml version="1.0" encoding="UTF-8"?>
+<res:ErrorResponse xmlns:res="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dhl.com err-res.xsd">
+    <Response>
+        <ServiceHeader>
+            <MessageTime>2020-08-21T09:20:13.486+02:00</MessageTime>
+        </ServiceHeader>
+        <Status>
+            <ActionStatus>Error</ActionStatus>
+            <Condition>
+                <ConditionCode>111</ConditionCode>
+                <ConditionData>Incorrect or Incomplete Input
+                    Parameters:SiteID not exist</ConditionData>
+            </Condition>
+        </Status>
+    </Response></res:ErrorResponse>
+<!-- ServiceInvocationId:20200821092013_72ec_d87cdc28-4dee-474d-a1a5-bcf4707bb864 -->
+',
+) [] []
