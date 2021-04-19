@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="mfwebp" translate="label" sortOrder="342" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>WebP Optimized Images</label>
+            <tab>magefan</tab>
+            <resource>Magefan_WebP::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Settings</label>
+                <field id="version" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Magefan\WebP\Block\Adminhtml\System\Config\Form\Info</frontend_model>
+                </field>
+                <field id="enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" >
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Key</label>
+                    <frontend_model>Magefan\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
+                </field>
+                <field id="quality" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Quality (1-100)</label>
+                    <comment><![CDATA[
+                        If you use high value (90-100) you will get the best quality but also these images will have bigger size<br>
+                        Don't forget to clean WebP cache after change  value of quality!
+                        ]]>
+                    </comment>
+                </field>
+                <field id="creation_options" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>WebP Generation Mode</label>
+                    <source_model>Magefan\WebP\Model\Config\Source\CreationOptions</source_model>
+                </field>
+                <field id="skip_media_folders" translate="label comment" type="textarea" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Skip Media Folders</label>
+                    <comment><![CDATA[
+                        List of files and folders that wil not be converted<br>
+                        E.g.: media/magefan_webp/wysiwyg<br>
+                        E.g.: media/catalog/product/3/4/example.png<br>
+                        ]]>
+                    </comment>
+                </field>
+                <field id="skip_static_folders" translate="label comment" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Skip Static Folders</label>
+                    <comment><![CDATA[
+                        List of files and folders that wil not be converted<br>
+                        E.g.:  Magento_Catalog/images/product.png
+                        E.g.:  static/adminhtml
+                        ]]>
+                    </comment>
+                </field>
+                <field id="convert_button" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label></label>
+                    <frontend_model>Magefan\WebP\Block\Adminhtml\System\Config\Form\Button</frontend_model>
+                    <comment>This action will clean all generated WebP images cache</comment>
+                </field>
+            </group>
+            <group id="advanced_settings" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Advanced WebP Conversion Settings</label>
+                <field id="convert_exists_picture" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0" >
+                    <label>Convert HTML Picture Tag Images</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If you use picture HTML tags that contain no WebP images, enable this option to convert them properly.</comment>
+                </field>
+                <field id="convert_background_images" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1" >
+                    <label>Convert CSS Background Images</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If you use CSS background images in an HTML tag style attribute, you may enable this option to convert these images to WebP.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

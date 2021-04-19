@@ -1,0 +1,47 @@
+<?php $images = $this->getImages() ?>
+<?php $all_images = $this->getAllImages() ?>
+<?php if(count($images)>0): ?>
+	<?php $links = $this->getLinks(); //echo '<pre>'; print_r($links);print_r($all_images);print_r($images); die;?>
+	<?php $blockId = rand() . time(); ?>
+	<?php $animated = $this->getAnimateSlider(); ?>
+	<div id="mgs-slider-<?php echo $blockId ?>" class="slider_mgs_carousel owl-carousel">
+		<?php foreach($all_images as $akey=>$aimage): ?>
+			<?php foreach($images as $key=>$image): ?>
+				<?php if($image == $aimage){ ?>
+					<?php if(isset($links[$akey]) && ($links[$akey]!='')): ?>
+						<a href="<?php echo $links[$akey] ?>">
+							<img data-original="<?php echo $aimage ?>" class="lazy" alt=""/>
+						</a>
+					<?php else: ?>
+						<img data-original="<?php echo $aimage ?>" class="lazy" alt=""/>
+					<?php endif ?>
+				<?php } ?>
+			<?php endforeach ?>
+		<?php endforeach ?>
+	</div>
+	<script type="text/javascript">
+		require([
+			'jquery',
+			'mgs/owlcarousel'
+		], function(jQuery){
+			(function($) {
+				$("#mgs-slider-<?php echo $blockId ?>").owlCarousel({
+					items: 1,
+					lazyLoad: true,
+					rtl: <?php echo $this->getRightToLeft(); ?>,
+					loop: <?php echo $this->getLoop(); ?>,
+					nav: <?php echo $this->getControlNav(); ?>,
+					dots: <?php echo $this->getControlDots(); ?>,
+					autoplayTimeout: <?php echo $this->getAutoSpeed(); ?>,
+					autoplay: <?php echo $this->getAutoPlay(); ?>,
+					autoplayHoverPause: <?php echo $this->getStopAuto() ? 'true' : 'false'; ?>,
+					animateOut: '<?php echo $animated['out'] ?>',
+					animateIn: '<?php echo $animated['in'] ?>',
+					navText: ["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]
+				});
+			})(jQuery);
+		});
+	</script>
+<?php else: ?>
+	<div role="alert" class="alert alert-warning"><?php echo __('There are no sliders matching the selection.') ?></div>
+<?php endif ?>

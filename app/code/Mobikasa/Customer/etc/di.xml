@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Checkout\CustomerData\DefaultItem" type="Mobikasa\Customer\CustomerData\DefaultItem" />
+    <preference for="Magento\Customer\Controller\Account\LoginPost" type="Mobikasa\Customer\Controller\Account\LoginPost" />
+    <preference for="Magento\Customer\Controller\Account\Logout" type="Mobikasa\Customer\Controller\Account\Logout" />
+    <preference for="Magento\Customer\Controller\Account\EditPost" type="Mobikasa\Customer\Controller\Account\EditPost" />
+    <preference for="Magento\Customer\Controller\Account\ForgotPasswordPost" type="Mobikasa\Customer\Controller\Account\ForgotPasswordPost" />
+</config>

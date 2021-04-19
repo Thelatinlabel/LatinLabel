@@ -1,0 +1,135 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+?>
+<div data-block="minicart" class="minicart-wrapper">
+    <a class="action showcart" href="<?php /* @escapeNotVerified */ echo $block->getShoppingCartUrl(); ?>"
+       data-bind="scope: 'minicart_content'">
+       <i class="icomooon-latin-bag"></i>
+        <span class="text"><?php /* @escapeNotVerified */ echo __('Cart'); ?></span>
+        <span class="counter qty empty"
+              data-bind="css: { empty: !!getCartParam('summary_count') == false }, blockLoader: isLoading">
+            <span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
+            <span class="counter-label">
+            <!-- ko if: getCartParam('summary_count') -->
+                <!-- ko text: getCartParam('summary_count') --><!-- /ko -->
+                <!-- ko i18n: 'items' --><!-- /ko -->
+            <!-- /ko -->
+            </span>
+        </span>
+    </a>
+    <?php if ($block->getIsNeedToDisplaySideBar()): ?>
+        <div class="block block-minicart empty"
+             data-role="dropdownDialog"
+             data-mage-init='{"dropdownDialog":{
+                "appendTo":"[data-block=minicart]",
+                "triggerTarget":".showcart",
+                "timeout": "2000",
+                "closeOnMouseLeave": false,
+                "closeOnEscape": true,
+                "triggerClass":"active",
+                "parentClass":"active",
+                "buttons":[]}}'>
+
+            <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
+                <div class="minibag">
+                    <a href="/checkout/cart/" class="view-minibag">VIEW BAG</a>
+                    <span class="fa fa-times hidecart"></span>
+                </div>
+               <div class="minicart-head"><?php /* @escapeNotVerified */ echo __('MY SHOPPING BAG'); ?><span class="icomooon-latin-bag" style="display:none;"></span></div> 
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            </div>
+            <?php echo $block->getChildHtml('minicart.addons'); ?>
+        </div>
+    <?php endif ?>
+    <script>
+        window.checkout = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($block->getConfig()); ?>;
+    </script>
+    <script type="text/x-magento-init">
+    {
+        "[data-block='minicart']": {
+            "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+        },
+        "*": {
+            "Magento_Ui/js/block-loader": "<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/loader-1.gif'); ?>"
+        }
+    }
+    </script>
+</div>
+
+
+<!--script type="text/javascript">
+    require([
+			'jquery'
+		], function($){
+			$(window).load(function(){
+                //open modal
+                var checkCount = setInterval(function(){
+                    var count = parseInt(jQuery('.counter-number').text());
+                    if(count >= 0){
+                        openMiniCartModal()
+                        console.log('loaded count: '+count);
+                        clearInterval(checkCount)
+                    }else if(count > 0 && oldCount == null){
+                        localStorage.setItem("cartvalue", 0);
+                        clearInterval(checkCount)
+                        clearInterval(checkCount)
+                    }
+                    else{                        
+                        var oldCount = localStorage.getItem("cartvalue");
+                        if(oldCount == null){
+                            localStorage.setItem("cartvalue", 0);
+                            clearInterval(checkCount)
+                        }
+                    }
+                },100);
+                // on remove updated localstorage
+                jQuery('.action.delete').click(function(){
+                    var count = parseInt(jQuery('.counter-number').text()); 
+                    localStorage.setItem("cartvalue", count);                   
+                })
+
+                //openMiniCartModal();
+                function openMiniCartModal(){
+                    // Check browser support
+                    if (typeof(Storage) !== "undefined") {
+                        var oldCount = localStorage.getItem("cartvalue");
+                        var count = parseInt(jQuery('.counter-number').text());
+                        if(oldCount != null){
+                            if(count > oldCount){
+                                localStorage.setItem("cartvalue", count);
+                                console.log('cart value: '+localStorage.getItem("cartvalue"));
+                                jQuery('.minicart-wrapper .block-minicart').show();
+                                jQuery('.minicart-wrapper .mage-dropdown-dialog').show();
+                            }
+                            else{
+                                localStorage.setItem("cartvalue", count);
+                            }
+                        }else{
+                            if(count > 0){
+                                localStorage.setItem("cartvalue", count);
+                                console.log('cart value: '+localStorage.getItem("cartvalue"));
+                                jQuery('.minicart-wrapper .block-minicart').show();
+                                jQuery('.minicart-wrapper .mage-dropdown-dialog').show();
+                            }
+                        }
+                        setTimeout(function(){
+                            jQuery('.minicart-wrapper .block-minicart').fadeOut();
+                            jQuery('.minicart-wrapper .mage-dropdown-dialog').fadeOut();
+                        },7000)
+                    } 
+                    else {
+                        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+                    }
+                }
+            })
+        })
+</script-->
+
+

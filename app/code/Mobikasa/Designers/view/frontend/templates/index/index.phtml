@@ -1,0 +1,39 @@
+<?php
+	$params = $this->getRequest()->getParams();
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $catId = 81;
+    $subCategory = $objectManager->create('Magento\Catalog\Model\Category')->load($catId);
+    $subCats = $subCategory->getChildrenCategories();
+
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    $finalarray = [];
+    $letter = '';
+    foreach ($subCats as $key => $value) {
+        $letter = strtoupper(substr($value->getName(), 0, 1));  
+        if(!empty($letter)){
+            if($value->getName() == 'New' || $value->getName() == 'Featured')
+            {}else{
+                $finalarray[$letter][$value->getName()][] = $value->getUrl();
+            }
+        }
+    }
+    ksort($finalarray);
+?>
+<h1>Designer A - Z</h1>
+<div class="designera2z">
+<div id="a2z" class="searcha2z-tab">&nbsp;</div>
+<div class="a2z-item">
+    <?php 
+    foreach ($finalarray as $k => $val) {
+    ?>
+        <div data-alpha="<?php echo strtolower($k); ?>" class="item-alpha col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="a2z-head"><?php echo $k; ?></div>
+        <ul class="a2z-list">
+           <?php foreach ($val as $c => $cat) { ?>
+                <li><a href="<?php echo $cat[0]; ?>"><?php echo $c; ?></a></li>
+            <?php } ?>
+        </ul>
+        </div>
+    <?php } ?>   
+</div>
+</div>

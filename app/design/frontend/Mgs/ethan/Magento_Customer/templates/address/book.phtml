@@ -1,0 +1,136 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Temlate for \Magento\Customer\Block\Address\Book block
+ * @var $block \Magento\Customer\Block\Address\Book
+ */
+?>
+<div class="row">
+	<div class="block block-addresses-default my-account-main col-sm-12 col-xs-12">
+		<div class="block-content row">
+			
+
+			<?php if ($_pAddsses = $block->getDefaultShipping()): ?>
+				<div class="box box-address-shipping col-sm-6">
+					<div class="block-title--myac">
+						<h3>
+							<?php /* @escapeNotVerified */ echo __('SHIPPING ADDRESS') ?>
+						</h3>
+					</div>
+					<div class="box-content">
+						<address>
+							<?php echo $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>							
+							<div class="box-actions">
+								<a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getAddressEditUrl($_pAddsses) ?>">
+									<span><?php /* @escapeNotVerified */ echo __('Edit') ?></span>
+								</a>
+							</div>
+						</address>
+					</div>
+				</div>
+			<?php else: ?>
+				<div class="box box-shipping-address col-sm-6">
+					<div class="block-title--myac">
+						<h3>
+							<?php /* @escapeNotVerified */ echo __('SHIPPING ADDRESS') ?>
+						</h3>
+					</div>
+					<div class="box-content">
+						<p><?php /* @escapeNotVerified */ echo __('You have no default shipping address in your address book.') ?></p>
+					</div>
+				</div>
+			<?php endif ?>
+
+			<?php if ($_pAddsses = $block->getDefaultBilling()): ?>
+				<div class="box box-address-billing col-sm-6">
+					<div class="block-title--myac">
+						<h3>
+							<?php /* @escapeNotVerified */ echo __('BILLING ADDRESS') ?>
+						</h3>
+					</div>
+					<div class="box-content">
+						<address>
+							<?php echo $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>							
+							<div class="box-actions">
+								<a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getAddressEditUrl($_pAddsses) ?>">
+									<span><?php /* @escapeNotVerified */ echo __('Edit') ?></span>
+								</a>
+							</div>
+						</address>
+					</div>
+				</div>
+			<?php else: ?>
+				<div class="box box-billing-address col-sm-6">
+					<div class="block-title--myac">
+						<h3>
+							<?php /* @escapeNotVerified */ echo __('BILLING ADDRESS') ?>
+						</h3>
+					</div>
+					<div class="box-content">
+						<p><?php /* @escapeNotVerified */ echo __('You have no default billing address in your address book.') ?></p>
+					</div>
+				</div>
+			<?php endif ?>
+		</div>
+	</div>
+
+	<div class="block block-addresses-list col-sm-12 col-xs-12">
+		<div class="block-title--myac"><h3><?php /* @escapeNotVerified */ echo __('Additional Address Entries') ?></h3></div>
+		<div class="block-content">
+			<div class="box box-content">
+					<?php if ($_pAddsses = $block->getAdditionalAddresses()): ?>
+						<ol class="items addresses">
+							<?php foreach ($_pAddsses as $_address): ?>
+								<li class="item col-sm-6">
+									<address>
+										<?php echo $block->getAddressHtml($_address) ?><br />
+										<div class="item actions box-actions">
+											<a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getUrl('customer/address/edit', ['id' => $_address->getId()]) ?>"><span><?php /* @escapeNotVerified */ echo __('Edit') ?></span></a>
+											<a class="action delete mp-gdpr-delete" href="#" role="delete-address" data-address="<?php /* @escapeNotVerified */ echo $_address->getId() ?>"><span><?php /* @escapeNotVerified */ echo __('Delete Address') ?></span></a>
+										</div>
+									</address>
+								</li>
+							<?php endforeach; ?>
+						</ol>
+					<?php else: ?>
+						<p class="empty"><?php /* @escapeNotVerified */ echo __('You have no other address entries in your address book.') ?></p>
+					<?php endif ?>
+			</div>
+		</div>
+	</div>
+</div>
+<hr>
+<div class="container">
+	<div class="row">
+		<div class="center-content text-center">		
+			<div class="actions-toolbar bottom">
+				<div class="primary">
+					<button type="button" role="add-address" title="<?php /* @escapeNotVerified */ echo __('CREATE NEW DELIVERY ADDRESS') ?>" class="action add btn btn-primary"><span><?php /* @escapeNotVerified */ echo __('CREATE NEW DELIVERY ADDRESS') ?></span></button>
+				</div>
+                <div class="secondary">
+					<a class="action back btn btn-secondary" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Back') ?></span></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".page-main": {
+            "address": {
+                "deleteAddress": "li.item a[role='delete-address']",
+                "deleteUrlPrefix": "<?php /* @escapeNotVerified */ echo $block->getDeleteUrl() ?>id/",
+                "addAddress": "button[role='add-address']",
+                "addAddressLocation": "<?php /* @escapeNotVerified */ echo $block->getAddAddressUrl() ?>"
+            }
+        }
+    }
+</script>

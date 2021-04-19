@@ -1,0 +1,221 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Product media data template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View\Gallery
+ */
+?>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" rel="stylesheet" type="text/css"/>
+<input type="hidden" id="product_type_gallery" name="product_type_gallery" value="normal"/>
+<div class="product media product-slider-media slider-loading">
+<?php $_product = $block->getProduct(); ?>
+<?php $_imagehelper = $this->helper('Magento\Catalog\Helper\Image'); ?>
+<?php $imgBase = $_imagehelper->init($_product, 'category_page_list')->getUrl(); ?>
+
+
+<?php $galleryImages = $block->getGalleryImages() ?>
+<?php if(count($galleryImages)): ?>
+	<?php $k = 0; foreach($galleryImages as $image): $k++; ?>
+		<?php if($k == 1): ?><?php $imgBase = $image->getLargeImageUrl(); ?><?php endif ?>
+		<?php if($image->getIsBaseImage()): ?>
+			<?php $imgBase = $image->getLargeImageUrl();?>
+		<?php endif ?>
+	<?php endforeach ?>
+	<?php if(count($galleryImages) > 1): ?>
+		<div class="parent__gallery-thumbnail vertical-slick">
+			<div class="product-gallery-carousel slider-nav gallery-thumbnail">
+				<?php foreach($galleryImages as $image): ?>
+					<div class="item">
+						<div class="image-item<?php if($image->getMediaType() == 'external-video'): ?> video-thumbnail<?php endif ?><?php if($image->getIsBaseImage() || $imgBase == $image->getLargeImageUrl()): ?> base-image active<?php endif ?>" data-img-change="<?php echo $image->getLargeImageUrl(); ?>">
+							<?php if($image->getMediaType() == 'external-video'): ?>
+								<a href="<?php echo $image->getVideoUrl(); ?>">
+							<?php endif ?>
+							<?php
+								$productImageUrl = $_imagehelper->init($_product, 'product_page_image_small')
+					            ->setImageFile($image->getFile())
+					            ->resize(125)
+					            ->getUrl();
+							?>
+								<img class="img-responsive imgLightbox" src="<?php echo $productImageUrl; ?>" alt=""/>
+								<!-- <img class="img-responsive imgLightbox" src="<?php //echo $image->getMediumImageUrl(); ?>" alt=""/> -->
+							<?php if($image->getMediaType() == 'external-video'): ?>
+								</a>
+							<?php endif ?> 
+						</div>
+					</div>
+				<?php endforeach ?>
+			</div>
+		</div>
+	<?php endif ?>
+	
+	<div class="product-image-base parentZoom slider-for">
+		<?php foreach($galleryImages as $image): ?>
+			<div class="item">
+				<div class="image-item<?php if($image->getMediaType() == 'external-video'): ?> video-thumbnail<?php endif ?><?php if($image->getIsBaseImage() || $imgBase == $image->getLargeImageUrl()): ?> base-image active<?php endif ?>" data-img-change="<?php echo $image->getLargeImageUrl(); ?>">
+					<?php if($image->getMediaType() == 'external-video'): ?>
+						<a href="<?php echo $image->getVideoUrl(); ?>">
+					<?php endif ?> 
+							<img class="img-responsive imgLightbox" src="<?php echo $image->getLargeImageUrl(); ?>" alt=""/>
+					<?php if($image->getMediaType() == 'external-video'): ?>
+						</a>
+					<?php endif ?> 
+				</div>
+			</div>
+		<?php endforeach ?>
+	</div>
+	<script>
+		require([
+			'jquery',
+			'js/slick',
+			'YouTubePopUp',
+			'zoom-images'
+		], function ($) {
+			$(window).load(function(){
+			//zoomElement(".product-image-base");
+			if(jQuery(window).width() < 768 ){
+				$('.product-image-base').trigger('zoom.destroy'); 
+			}else{				
+				$(".product-image-base").zoom({touch: true});
+			}
+				$(".product-video-button a").YouTubePopUp();
+				$(".image-item.video-thumbnail a").YouTubePopUp();
+			})
+			if(jQuery(window).width() < 768 ){    
+				$(document).on('click','.imgLightbox', function(){
+					console.log('clickeed lightbox')
+					$('.img-mob-popup-container').trigger('zoom.destroy'); 
+					var thisUrl = $(this).attr('src');
+					$('.img_mob_popup').show();
+					$('body').css('overflow','hidden');
+					$('html').css('overflow','hidden');
+					$('.img_mob_popup').find('img').attr('src',thisUrl);
+					$('.img-mob-popup-container').zoom();
+				})   
+				$('.img-mob-popup-overlay').click(function(){
+					$('.img_mob_popup').hide();
+					$('body').css('overflow','auto');
+					$('html').css('overflow','auto');
+					$('.img-mob-popup-container').trigger('zoom.destroy');
+				}) 
+				$('.img-mob-close-popup').click(function(){
+					$('.img_mob_popup').hide();
+					$('body').css('overflow','auto');
+					$('html').css('overflow','auto');
+					$('.img-mob-popup-container').trigger('zoom.destroy');
+				})
+			}		
+		})
+		</script>
+	<!--script type="text/javascript">
+		require([
+			'jquery',
+			'js/slick',
+			'YouTubePopUp'
+		], function ($) {
+			<?php if(count($galleryImages) > 1): ?>							
+				$('.product-image-base').not('.slick-initialized').slick({
+					slidesToShow: 1,
+					slidesToScroll: 1,
+					arrows: false,
+					fade: true,
+					asNavFor: '.product-gallery-carousel',
+					responsive: [
+						{
+							breakpoint: 480,
+							settings: {
+								dots: true
+							}
+						}
+					]
+				});
+				$('.product-gallery-carousel').not('.slick-initialized').slick({
+					slidesToShow: 4,
+					vertical:true,
+					slidesToScroll: 1,
+					asNavFor: '.product-image-base',
+					arrows: true,
+					infinite:false,
+					dots: false,
+					focusOnSelect: true,
+					responsive: [
+						{
+							breakpoint: 1200,
+							settings: {
+								slidesToShow: 3,
+								vertical:false,
+								dots: true,
+								arrows: false
+							}
+						},
+						{
+							breakpoint: 767,
+							settings: {
+								slidesToShow: 1,
+								vertical:false,
+								dots: true,
+								arrows: false
+							}
+						}
+					]
+				});
+			<?php endif ?>
+			$(document).ready(function() {
+				zoomElement(".product-image-base");
+				$(".product-video-button a").YouTubePopUp();
+				$(".image-item.video-thumbnail a").YouTubePopUp();
+				
+				function selectFirstVariant(){
+					jQuery('#product-addtocart-button').attr('disabled','disabled');
+					setTimeout(function(){
+						jQuery('.product-slider-media').removeClass('slider-loading');
+						//select first variant
+						if(jQuery('#show-color-image .attribute-color').length > 0){
+							jQuery('#show-color-image .attribute-color:first-child').find('label').trigger('click');
+							console.log('First variant triggered')
+						}
+						jQuery('#product-addtocart-button').removeAttr('disabled');
+					},500);
+				}
+
+				jQuery(document).on('click', '.catalog-attr-head',function(){
+					jQuery(this).find(".fa").toggleClass("fa-plus fa-minus");
+					jQuery(this).next(".catalog-attr-content").slideToggle(200);
+				});
+
+				$(window).load(function(){				
+					//select first variant
+					selectFirstVariant();
+
+					jQuery('#product-addtocart-button').removeAttr('disabled');
+					var checkSlickLoaded = setInterval(function(){
+						if(jQuery('.product-image-base').find('.slick-slide').length > 0){
+							//Removed loading
+							jQuery('.product-slider-media').removeClass('slider-loading');
+							//first thumb selected
+							jQuery('.parent__gallery-thumbnail .item:first-child .image-item img').trigger('click');
+							clearInterval(checkSlickLoaded);
+							console.log('loading removed')
+						}
+						//click again to prevent slider break
+						jQuery('#show-color-image .attribute-color .img-label.active').trigger('click');
+					},100);
+				})
+			});
+		});
+	</script-->
+<?php else: ?>
+	<div class="product-image-base">
+		<img class="img-responsive zoomImgs" src="<?php echo $imgBase; ?>" alt=""/>
+	</div>
+<?php endif ?>
+
+</div>

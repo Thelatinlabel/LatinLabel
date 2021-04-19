@@ -1,0 +1,62 @@
+<?php $helper = $this->helper('MGS\Mpanel\Helper\Data') ?>
+<?php $canUsePanel = $helper->acceptToUsePanel() ?>
+<?php $block = $this->getBlock() ?>
+<div class="footer-container">
+	<div class="middle-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 footer-m-order-2">
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<!-- Static block: footer_block_latin_label -->
+						<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_block_latin_label')->setCanUsePanel($canUsePanel)->toHtml() ?>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<!-- Static block: footer_block_customer_care -->
+						<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_block_customer_care')->setCanUsePanel($canUsePanel)->toHtml() ?>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<!-- Static block: footer_block_legal_terms -->
+						<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_block_legal_terms')->setCanUsePanel($canUsePanel)->toHtml() ?>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 footer-m-order-0">
+					<!-- Static block: footer_block_instagram -->
+					<?php //echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_block_instagram')->setCanUsePanel($canUsePanel)->toHtml() 
+					?>
+					<!-- Static block: footer_block_newsletter -->
+					<?php //echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_block_newsletter')->setCanUsePanel($canUsePanel)->toHtml() 
+					?>
+					<h4>SUBSCRIBE TO OUR NEWSLETTER</h4>
+					<?php echo $this->getLayout()->createBlock("Magento\Newsletter\Block\Subscribe")->setTemplate("Mobikasa_Newsletters::subscribe.phtml")->toHtml(); ?>
+				</div>
+				<div class="col-xs-12 footer-border footer-m-order-1">
+					<!-- Static block: footer_block_social -->
+					<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_block_social')->setCanUsePanel($canUsePanel)->toHtml() ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$baseUrl =  $objectManager
+                        ->get('Magento\Store\Model\StoreManagerInterface')
+                        ->getStore()
+                        ->getBaseUrl();
+$cdnUrl = 'https://d3qpa7u7e184rr.cloudfront.net/';                        
+ ?>
+	<div class="bottom-footer">
+		<div class="container">
+			<div class="row">
+				
+				<div class="col-xs-12 text-center">
+					<span class="Secure-paymeny">Secure payments</span>
+					<img src="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/visa.png" data-original="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/visa.png" alt="Visa" class="paymeny-image lazy">
+					<img src="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/master.png" data-original="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/master.png" alt="Master" class="paymeny-image lazy">
+					<img src="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/amex.png" data-original="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/amex.png" alt="American Express" class="paymeny-image lazy">
+					<img src="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/jcb.png" data-original="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/jcb.png" alt="JCB" class="paymeny-image lazy">
+					<img src="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/paypal.png" data-original="<?php echo $cdnUrl; ?>pub/media/mgs/ethan/footers/paypal.png" alt="Paypal" class="paymeny-image lazy">
+					<address><?php /* @escapeNotVerified */ echo $block->getCopyright() ?></address>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

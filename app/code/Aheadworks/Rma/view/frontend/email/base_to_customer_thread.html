@@ -1,0 +1,59 @@
+<!--@subject {{trans 'Your return request #%request_text_id status is %request_status' request_text_id=$request.getTextId() request_status=$request.getStatus()}}@-->
+{{template config_path="design/email/header_template"}}
+{{inlinecss file="Aheadworks_Rma::css/email.css"}}
+<table style="width: 100%; border: 3px solid #F4A63B; background-color: #38121342; margin-top:-5px;">
+    <tr>
+        <td>
+            <table style="max-width: 370px; margin:0 auto; float: none; text-align: center;  color: #1A1818;">
+                <tr>
+                    <td>
+                        <h3 style="letter-spacing: 0px; margin-top:42px; font-family: serif; font-size:24.08px; margin-bottom: 23px;">Your refund request was received</h3>
+                        <p style="font-size: 12px; line-height: 17px; margin-bottom: 25px; margin-top:0px;">We would like to inform you that we will contact you to proceed with the refund.</p>
+                        {{trans '<a href="%account_url" style="margin:15.95px auto 18.47px; width: 205px; text-decoration: none; color:#1A1818; background-color:#F4A63B ; display:block; letter-spacing: 2.05px; text-transform:uppercase; font-weight:bold;font-size:12px; letter-spacing: 2.05; line-height: 14.4px; padding-top: 8px; padding-bottom: 8px;">VIEW ACCOUNT</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}
+                        <!--p style="font-size: 12px; line-height: 17px; font-style: italic; margin-bottom: 23px; margin-top:0px;">You will soon receive the amount in the payment method you used. It may take up to 20 business days to show, depending on your bank or payment provider</p-->
+                        <p style="font-size: 12px; line-height: 17px; margin-bottom: 23px; margin-top:0px;">We hope to hear from you again.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table style="width:100%; padding:15px; border:1px solid #ddd;">
+    <tr>
+        <td>
+            <p style="font-style: italic; font-size: 12px; text-align:center; max-width:480px; margin-left:auto; margin-right:auto; line-height: 17px; font-style: italic;">Our sincere apologize for any inconvenience this may have caused. Please contact us if there’s anything we can assist you with in the meantime.</p>
+            <div style="text-align: center; margin-top:15px;">
+                <a href="mailto:customercare@thelatinlabel.com" style="margin:15.95px auto 18.47px; width: 205px; text-decoration: none; color:#1A1818; background-color:#F4A63B ; display:block; letter-spacing: 2.05px; text-transform:uppercase; font-weight:bold;font-size:12px; letter-spacing: 2.05; line-height: 14.4px; padding-top: 8px; padding-bottom: 8px;">NEED HELP?</a>
+            </div>
+        </td>
+    </tr>
+</table>  
+<!--table style="width:100%; padding:15px; border:1px solid #ddd; display: none;">
+    <tr>
+        <td>
+            <p style="font-size: 12px; line-height: 17px;">{{trans 'Dear %customer_name,' customer_name=$request.getCustomerName()}}</p>
+            <p style="font-size: 12px; font-style:italic; margin-top:15px; line-height: 17px;"></p>Our sincere apologize for any inconvenience this may have caused. Please contact us if there’s anything we can assist you with in the meantime.</p>
+            <p style="font-size: 12px; line-height: 17px; margin-top:15px;">
+                {{trans
+                    'Your RMA request #%request_text_id status has been changed to %request_status'
+                    request_text_id=$request.getTextId() request_status=$request.getStatus()
+                }}
+            </p>
+            {{depend request.getCustomText()}}
+            <p style="font-size: 12px; line-height: 17px;">{{var request.getCustomText() |nl2br|raw}}</p>
+            {{/depend}}
+            {{depend request.getNotifyCommentText()}}
+                <div class="aw-rma__comment">
+                    <strong><span>{{var request.getNotifyCommentLabel()}}</span></strong>
+                    <div class="comment-text">{{var request.getNotifyCommentText() |nl2br}}</div>
+                </div>
+            {{/depend}}
+            <p style="font-size: 12px; line-height: 17px;">{{trans 'You can view RMA status and add a message <a href="%url">here</a>.' url=$request.getUrl() |raw}}</p>
+            <p style="font-size: 12px; line-height: 17px;">{{trans 'Thank you for using our RMA service.' }}</p>
+            <a href="https://www.thelatinlabel.com/contact" style="margin:15.95px auto 18.47px; width: 205px; text-decoration: none; color:#1A1818; background-color:#F4A63B ; display:block; letter-spacing: 2.05px; text-transform:uppercase; font-weight:bold;font-size:12px; letter-spacing: 2.05; line-height: 14.4px; padding-top: 8px; padding-bottom: 8px;">NEED HELP?</a>
+        </td>
+    </tr>
+</table-->
+
+{{template config_path="design/email/footer_template"}}

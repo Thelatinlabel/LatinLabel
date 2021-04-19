@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Form\Login $block */
+?>
+<?php
+/**
+ * Customer login form template
+ *
+ * @see \Magento\Customer\Block\Form\Login
+ * @var $block \Magento\Customer\Block\Form\Login
+ */
+?>
+<div class="block block-customer-login">
+    <div class="block-title">
+		<h2 class="title" id="block-customer-login-heading" role="heading" aria-level="2"><span><?php /* @escapeNotVerified */ echo __('SIGN IN TO THE LATIN LABEL') ?></span></h2>
+    </div>
+    <div class="block-content" aria-labelledby="block-customer-login-heading">
+        <form class="form form-login margin-bottom20"
+              action="<?php /* @escapeNotVerified */ echo $block->getPostActionUrl() ?>"
+              method="post"
+              id="login-form"
+              data-mage-init='{"validation":{}}'>
+            <?php echo $block->getBlockHtml('formkey'); ?>
+            <fieldset class="fieldset login" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>">
+                <div class="field note margin-bottom10"><?php /* @escapeNotVerified */ echo __('Welcome back! If you already have an account with us, please sign in.') ?></div>
+                <div class="form-group email required">
+					<div class="form-group">
+						<label for="login[username]" class="required"><?php echo __('Email Address'); ?><em>*</em></label>
+						<div class="control">
+							<input name="login[username]" value="<?php echo $block->escapeHtml($block->getUsername()) ?>" <?php if ($block->isAutocompleteDisabled()) :?> autocomplete="off"<?php endif; ?> id="email" type="email" class="input-text" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" data-validate="{required:true, 'validate-email':true}">
+						</div>	
+					</div>
+                </div>
+                <div class="form-group password required">
+					<div class="form-group">
+						<label for="login[username]" class="required"><?php echo __('Password'); ?><em>*</em></label>
+						<div class="control">
+                            <input name="login[password]" placeholder="Password" type="password" <?php if ($block->isAutocompleteDisabled()) :?> autocomplete="off"<?php endif; ?> class="input-text input-password" id="pass" title="<?php /* @escapeNotVerified */ echo __('Password') ?>" data-validate="{required:true}">
+                            <span class="show-password btn-show-hide" style="display:none;">Show Password</span>
+                            <span class="hide-password btn-show-hide" style="display:none;">Hide Password</span>
+						</div>
+					</div>
+                </div>
+                <?php echo $block->getChildHtml('form_additional_info'); ?>
+                <div class="actions-toolbar padding-top10">
+                    <button type="submit" class="action login btn btn-primary" name="send" id="send2"><span><?php /* @escapeNotVerified */ echo __('SIGN IN AND CONTINUE') ?></span></button>
+                    <a class="margin-left15 action remind" href="<?php /* @escapeNotVerified */ echo $block->getForgotPasswordUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Forgot Your Password?') ?></span></a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

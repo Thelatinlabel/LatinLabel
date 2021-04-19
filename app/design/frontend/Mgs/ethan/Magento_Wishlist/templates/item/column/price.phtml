@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart $block */
+$item = $block->getItem();
+$product = $item->getProduct();
+$attr = [];
+$optionColor = $optionSize = '';
+$attr = $item->getBuyRequest()->getSuperAttribute();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+if(!empty($attr)){
+	foreach ($attr as $key => $value) {
+		$attributeObj = $product->getResource()->getAttribute('catalog_product', $key);
+		$eavConfig = $objectManager->create('\Magento\Eav\Model\Config');
+		$attribute = $eavConfig->getAttribute('catalog_product', $key);
+		if($attribute->getFrontendLabel() == 'Color'){
+			$attr = $product->getResource()->getAttribute('color');
+			 if ($attr->usesSource()) {
+			       $optionColor = $attr->getSource()->getOptionText($value);
+			 }
+		}
+		if($attribute->getFrontendLabel() == 'Size'){
+			$attr = $product->getResource()->getAttribute('size');
+			 if ($attr->usesSource()) {
+			       $optionSize = $attr->getSource()->getOptionText($value);
+			 }
+		}
+	}
+}
+?>
+<?php 
+   if(!empty($optionColor)) { ?>
+   	<div class="color-box">        
+	    <span class="head-name">Color</span>
+	    <span class="color"><?php echo $optionColor; ?></span>    
+	</div>
+   <?php } ?>
+   <?php 
+   if(!empty($optionSize)) { ?>
+   	<div class="size-box">        
+	    <span class="head-name">Size</span>
+	    <span class="color"><?php echo $optionSize; ?></span>    
+	</div>
+   <?php } ?>
+<div class="price-box-1"> 	
+<span class="head-name">Price</span>
+<?php foreach ($block->getChildNames() as $childName) : ?>
+    <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
+<?php endforeach;?>
+</div>

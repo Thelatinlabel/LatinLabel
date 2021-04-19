@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**
+ * Shopping cart template
+ *
+ * @var $block \Magento\Checkout\Block\Cart
+ */
+echo '<div class="page-title-wrapper">
+	    <h1 class="cart-page-header">
+	        <span class="base" data-ui-id="page-title-wrapper">MY BAG</span>    </h1>
+	  </div>';
+if ($block->getItemsCount()) {
+    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
+    echo $block->getChildHtml('with-items');
+} else {
+    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
+    echo $block->getChildHtml('no-items');
+}

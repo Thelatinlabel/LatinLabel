@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Newsletter unsubscription success"}} @-->
+<!--@vars {
+"template config_path=\"design\/email\/footer_template\"":"Email Footer Template",
+"template config_path=\"design\/email\/header_template\"":"Email Header Template"
+} @-->
+
+
+{{template config_path="design/email/header_template"}}
+
+<table style="text-align: center; width:100%; margin-top:-2px; color: #1A1818;">
+    <tr>
+        <td style="border: 3px solid #F4A63B; background-color: #38121342;">
+            <table style="max-width:370px; margin:30px auto; float: none;">
+                <tr>
+                    <td>
+                        <h3 style="letter-spacing: 0px; text-align:center; margin-top:42px; font-family: serif; font-size:24.08px; margin-bottom: 0px;">Hello,</h3>
+                        <p style="font-size: 12px; line-height: 17px; margin-top:10px; margin-bottom:0px;">{{trans "You have been unsubscribed from the newsletter."}}</p>
+                        <a href="https://www.thelatinlabel.com/new-arrivals" style="margin:15.95px auto 18.47px; font-weight:bold; width: 205px; text-decoration: none; color:#1A1818; background-color:#F4A63B ; display:block; letter-spacing: 2.05px; text-transform:uppercase; font-weight:bold;font-size:12px; letter-spacing: 2.05; line-height: 14.4px; padding-top: 8px; padding-bottom: 8px;">SHOP NOW</a>
+                        <p style="font-size: 12px; line-height: 17px; font-style: italic; margin-bottom: 23px; margin-top:0px;">We hope you enjoy your shopping experience with us here’s what you can look forward too ....</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

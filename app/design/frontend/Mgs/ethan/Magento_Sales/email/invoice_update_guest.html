@@ -1,0 +1,72 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Update to your %store_name invoice" store_name=$store.frontend_name}} @-->
+<!--@vars {
+"var billing.name":"Guest Customer Name",
+"var comment|escape|nl2br":"Invoice Comment",
+"var invoice.increment_id":"Invoice Id",
+"var order.increment_id":"Order Id",
+"var order_data.frontend_status_label":"Order Status",
+"var store.frontend_name":"Store Frontend Name",
+"var store_phone":"Store Phone",
+"var store_email":"Store Email",
+"var store_hours":"Store Hours"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<table style="width: 100%; border: 3px solid #F4A63B; background-color: #38121342; margin-top:-5px;">
+    <tr>
+        <td>
+            <table style="max-width: 380px; margin:0 auto; float: none; text-align: center;  color: #1A1818;">
+                <tr>
+                    <td>
+                        <h3 style="letter-spacing: 0px; margin-top:42px; font-family: serif; font-size:24.08px; margin-bottom: 0px;">Order Invoice Update</h3>
+                        <h5 style="letter-spacing: 0px; margin-top:3px; font-size:12px;">{{trans "Your Invoice #%invoice_id for Order #%order_id" invoice_id=$invoice.increment_id order_id=$order.increment_id}}</h5>
+                        <a href="%account_url" style="margin:15.95px auto 18.47px; margin-bottom:10px; width: 205px; text-decoration: none; color:#1A1818; background-color:#F4A63B ; display:block; letter-spacing: 2.05px; text-transform:uppercase; font-weight:bold;font-size:12px; letter-spacing: 2.05; line-height: 14.4px; padding-top: 8px; padding-bottom: 8px;">VIEW YOUR ORDER</a>
+                        <p style="font-size: 14px; line-height: 20px; font-style: italic; margin-bottom: 23px; margin-top:0px;">Thank you for purchasing with us. Your order was received and will be processed shortly. We will be carefully preparing your order. You will receive a confirmation shipping email as soon as your item is sent with the tracking number.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<table style="width: 100%; border:1px solid #ddd; padding:15px;">
+    <tr class="email-intro">
+        <td>
+            <h2 style="font-size:16px; font-family: 'Lato', sans-serif; padding:0px; font-weight: bold; letter-spacing: 2.74px; margin-top:25px; margin-bottom: 25px;">{{trans "%name," name=$billing.name}}</h2>
+            <p>
+                {{trans
+                    "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
+
+                    increment_id=$order.increment_id
+                    order_status=$order_data.frontend_status_label
+                |raw}}
+            </p>
+            <p>
+                {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
+                {{depend store_hours}}
+                    {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                {{/depend}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            {{depend comment}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var comment|escape|nl2br}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

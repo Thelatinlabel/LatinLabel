@@ -1,0 +1,177 @@
+<?php
+// @codingStandardsIgnoreFile
+
+/** 
+ * @var $block \Magento\Catalog\Block\Product\View
+ */
+$objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+$registry = $objectManager->get('\Magento\Framework\Registry');
+$currentProduct = $registry->registry('current_product');
+$helper = $this->helper('Mobikasa\Variants\Helper\Variants');
+$productData = $helper->getPDPData($currentProduct->getId());
+?>
+<?php if(isset($productData['complete_your_look'])) { ?>
+<div class="custom-data related-product-main navigation-top title-v2 related" data-limit="0" data-shuffle="0">
+<div class="content-heading">
+	<h4 class="title">
+		<span id="block-related-heading" role="heading" aria-level="2">COMPLETE YOUR LOOK</span>
+	</h4>
+</div>
+<div class="block-content content" aria-labelledby="block-related-heading">
+<div class="products wrapper grid products-grid" id="product-wrapper">
+	<ol class="products list items product-items product-related-slider owl-carousel complete_your_look">
+	<?php foreach ($productData['complete_your_look'] as $product) { ?>
+		<li class="item product product-item-info product-item">
+			<div class="product-top">
+				<a href="<?php echo $product['url']; ?>" class="product photo product-item-photo" tabindex="-1">
+					<img src="<?php echo $product['image']; ?>" data-original="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" class="img-responsive  product-image-photo img-thumbnail lazy" data-original="<?php echo $product['image']; ?>">
+				</a>
+				<?php if($product['special_price']!=''){ ?>
+					<span class="product-label sale-label"><span>SALE</span></span>
+				<?php } ?>
+			</div>
+			<div class="product details product-item-details">
+				<h5 class="designer_name product-item-name text-uppercase"><?php echo $product['designer']; ?></h5>
+				<h5 class="product name product-item-name">
+				<a class="product-item-link" href="<?php echo $product['url']; ?>">
+				<?php echo $product['name']; ?>
+				</a>
+				</h5>
+				<?php if($product['special_price']!=''){ ?>
+				<div class="price-box price-final_price" data-role="priceBox">	
+				<div class="special-price">
+					<span class="price-container price-final_price tax weee">
+						<span data-price-type="finalPrice" class="price-wrapper ">
+							<span class="price"><?php echo $product['special_price'] ?></span>
+						</span>
+					</span>
+				</div>
+				<div class="old-price">
+					<span class="price-container price-final_price tax weee">
+						<span data-price-type="finalPrice" class="price-wrapper ">
+							<span class="price"><?php echo $product['price'] ?></span>
+						</span>
+					</span>
+				</div>
+			</div>
+				<?php } else { ?>
+				<div class="price-box price-final_price" data-role="priceBox">
+					<span class="price-container price-final_price tax weee">
+						<span data-price-type="finalPrice" class="price-wrapper ">
+							<span class="price"><?php echo $product['price'] ?></span>
+						</span>
+					</span>
+				</div>
+				<?php } ?>
+				<div class="custom_addto_cart">
+				<button type="button" title="Add to Bag" class="action tocart">
+				<a href="<?php echo $product['url']; ?>">Add to Bag</a>
+				</button>
+				</div>
+			</div>
+		</li>
+		<?php } ?><!--end foreach-->
+	</ol>
+</div>
+</div>
+</div>	
+<?php } ?>
+
+<?php if(isset($productData['you_may_also_like'])) { ?>
+<div class="custom-data related-product-main navigation-top title-v2 related" data-limit="0" data-shuffle="0">
+<div class="content-heading">
+	<h4 class="title">
+		<span id="block-related-heading" role="heading" aria-level="2">YOU MAY ALSO LIKE</span>
+	</h4>
+</div>
+<div class="block-content content" aria-labelledby="block-related-heading">
+<div class="products wrapper grid products-grid" id="product-wrapper">
+	<ol class="products list items product-items product-related-slider owl-carousel you_may_also_like">
+	<?php foreach ($productData['you_may_also_like'] as $_product) { ?>
+		<li class="item product product-item-info product-item">
+			<div class="product-top">
+				<a href="<?php echo $_product['url']; ?>" class="product photo product-item-photo" tabindex="-1">
+					<img src="<?php echo $_product['image']; ?>" data-original="<?php echo $_product['image']; ?>" alt="<?php echo $_product['name']; ?>" class="img-responsive  product-image-photo img-thumbnail lazy" data-original="<?php echo $_product['image']; ?>">
+				</a>
+				<?php if($_product['special_price']!=''){ ?>
+					<span class="product-label sale-label"><span>SALE</span></span>
+				<?php } ?>
+			</div>
+			<div class="product details product-item-details">
+				<h5 class="designer_name product-item-name text-uppercase"><?php echo $_product['designer']; ?></h5>
+				<h5 class="product name product-item-name">
+				<a class="product-item-link" href="<?php echo $_product['url']; ?>">
+				<?php echo $_product['name']; ?>
+				</a>
+				</h5>
+				
+				<?php if($_product['special_price']!=''){ ?>
+				<div class="price-box price-final_price" data-role="priceBox">
+				<div class="special-price">
+					<span class="price-container price-final_price tax weee">
+						<span data-price-type="finalPrice" class="price-wrapper ">
+							<span class="price"><?php echo $_product['special_price'] ?></span>
+						</span>
+					</span>
+				</div>
+				<div class="old-price">
+					<span class="price-container price-final_price tax weee">
+						<span data-price-type="finalPrice" class="price-wrapper ">
+							<span class="price"><?php echo $_product['price'] ?></span>
+						</span>
+					</span>
+				</div>
+				</div>
+				<?php } else { ?>
+				<div class="price-box price-final_price" data-role="priceBox">
+					<span class="price-container price-final_price tax weee">
+						<span data-price-type="finalPrice" class="price-wrapper ">
+							<span class="price"><?php echo $_product['price'] ?></span>
+						</span>
+					</span>
+				</div>
+				<?php } ?>
+				<div class="custom_addto_cart">
+				<button type="button" title="Add to Bag" class="action tocart">
+				<a href="<?php echo $_product['url']; ?>">Add to Bag</a>
+				</button>
+				</div>
+			</div>
+		</li>
+		<?php } ?><!--end foreach-->
+	</ol>
+</div>
+</div>
+</div>	
+<?php } ?>
+
+<script type="text/javascript">
+		require([
+			'jquery',
+			'mgs/owlcarousel'
+		], function ($) {
+			$('.product-related-slider').owlCarousel({
+				items: 4,
+				lazyLoad: true,
+				autoplay: false,
+				autoplayHoverPause: true,
+				nav: false,
+				dots: true,
+				slideBy: 1,
+				responsive:{					
+					0:{
+						items:1
+					},
+					480:{
+						items:1
+					},
+					768:{
+						items:3
+					},
+					991:{
+						items:4
+					}
+				}
+			});
+		});
+	</script>

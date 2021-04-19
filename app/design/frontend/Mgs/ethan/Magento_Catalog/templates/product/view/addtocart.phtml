@@ -1,0 +1,259 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct();
+$productType = $_product->getTypeID(); 
+?>
+<?php $buttonTitle = __('Add To Bag'); ?>
+<?php if ($_product->isSaleable()): ?>
+
+	<?php $themeHelper = $this->helper('MGS\Mpanel\Helper\Data'); ?>
+	
+	<?php // If is deals product. Show countdown time ?>
+	<?php if($_product->getSpecialPrice() && $_product->getSpecialToDate() && $_product->getSpecialFromDate()): ?>
+		
+		<?php $dateTimeFormat = \Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT; ?>
+		<?php $now = $themeHelper->getCurrentDateTime(); ?>
+		<?php $specialFromDate = date($dateTimeFormat, strtotime($_product->getSpecialFromDate())); ?>
+		<?php $specialToDate = date($dateTimeFormat, strtotime($_product->getSpecialToDate())); ?>
+		
+		<?php if($specialFromDate <= $now && $specialToDate > $now): ?>
+			<div class="product-detail-deals">
+				<?php echo $this->getLayout()->createBlock('MGS\Mpanel\Block\Products\Deals')->setProduct($_product)->setTemplate('MGS_Mpanel::products/deals/item.phtml')->toHtml() ?>
+			</div>
+		<?php endif ?>
+		
+	<?php endif ?>
+	<?php // End Deals ?>
+	
+	<div class="box-tocart">
+
+		<?php echo $block->getChildHtml('', true) ?>
+		
+		<div class="fieldset">
+			<!-- Size input box -->
+			
+			<!-- Quantity input box -->
+			<?php 
+			if($productType != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE):
+				if ($block->shouldRenderQuantity()): ?>
+				<div class="field qty">
+					<label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Quantity') ?></span></label>
+					<div class="control">
+						<input type="number"
+							   name="qty"
+							   id="qty"
+							   maxlength="12"
+							   value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
+							   title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty"
+							   data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+							   />
+						<span class="edit-qty plus fa fa-angle-up" onclick="plusQty('qty')"></span>
+						<span class="edit-qty minus fa fa-angle-down" onclick="minusQty('qty')"></span>
+					</div>
+				</div>
+				<?php endif; ?>
+			<?php endif; ?>
+			<div class="actions">
+				<button type="submit"
+						title="Add to Bag"
+						class="action primary tocart"
+						id="product-addtocart-button">
+						<!-- <span class="fa fa-shopping-cart"></span> -->
+					<span>Add to Bag</span>
+				</button>
+				<?php
+					$_wishlistSubmitParams = $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_product);
+					$compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
+				?>
+				
+				<?php if ($themeHelper->getStoreConfig('mpanel/product_details/wishlist') && $this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+				
+				
+					<!-- <button class="action towishlist"
+						data-post='<?php /* @escapeNotVerified */ //echo $_wishlistSubmitParams; ?>'
+						data-action="add-to-wishlist"
+						title="<?php /* @escapeNotVerified */ //echo __('Add to Wish List') ?>">
+							<span class="fa fa-heart-o"></span>
+							<span><?php /* @escapeNotVerified */ //echo __('Add to WishList') ?></span>
+					</button>
+					<script type="text/x-magento-init">
+						{
+							"body": {
+								"addToWishlist": <?php /* @escapeNotVerified */ //echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
+							}
+						}
+					</script> -->
+				<?php endif; ?>
+				
+				<?php if($themeHelper->getStoreConfig('mpanel/product_details/compare')): ?>
+					<button class="action tocompare" 
+						data-post='<?php /* @escapeNotVerified */ echo $compareHelper->getPostDataParams($_product);?>'
+						data-role="add-to-links"
+						title="<?php /* @escapeNotVerified */ echo __('Add to Compare') ?>">
+							<span class="fa fa-retweet"></span>
+					</button>
+				<?php endif ?>
+				
+				<?php if ($block->canEmailToFriend()): ?>
+					<button onclick="setLocation('<?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>')" 
+				   class="action mailto friend" title="<?php /* @escapeNotVerified */ echo __('Send Email to Friend') ?>"><span class="fa fa-envelope"></span></button>
+				<?php endif; ?>
+			</div>
+			
+		</div>
+	</div>
+	
+<div class="img_mob_popup" style="display:none;">
+	<div class="img-mob-popup-overlay"><i class="img-mob-close-popup fa fa-close"></i></div>
+	<div class="img-mob-popup-container">		
+		<img src=""/>
+	</div>
+</div>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/product/view/validation": {
+                "radioCheckboxClosest": ".nested"
+            }
+        }
+    }
+</script>
+<?php if (!$block->isRedirectToCartEnabled()) : ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "catalogAddToCart": {
+                "bindSubmit": false
+            }
+        }
+    }
+</script>
+<?php endif; ?>
+
+<?php if ($block->shouldRenderQuantity()): ?>
+	<script type="text/javascript">
+		function plusQty(qtyInput){
+			require([
+			'jquery'
+			], function(jQuery){
+				(function($) {
+					if($('#'+qtyInput).attr('disabled')!='disabled'){
+						qty = $('#'+qtyInput).attr('value');
+						qty = parseInt(qty);
+						qty++;
+						$('#'+qtyInput).val(qty);
+					}
+				})(jQuery);
+			});
+			
+		}
+		function minusQty(qtyInput){
+			require([
+			'jquery'
+			], function(jQuery){
+				(function($) {
+					if($('#'+qtyInput).attr('disabled')!='disabled'){
+						qty = $('#'+qtyInput).attr('value');
+						qty = parseInt(qty);
+						
+						if(qty>1){
+							qty--;
+							$('#'+qtyInput).val(qty);
+						}
+					}
+				})(jQuery);
+			});
+		}
+	</script>
+<?php endif; ?>
+<script>
+	require([
+		'jquery'
+	], function(jQuery){
+		(function($) {
+			
+			jQuery('.price-box').each(function(){
+					var price = jQuery(this).find('.price').text();
+					if(price.indexOf('.') > -1){
+						price = price.split('.')[0];
+						jQuery(this).find('.price').text(price)
+					}
+				})
+			/*$('#product-addtocart-button').click(function(){
+				var add_to_cart = jQuery('#product_addtocart_form');
+				var check_Valid = form.valid();
+				if(isValid){
+					$(".success-ajax--popup").hide();
+					$("html").css("overflow-y", "auto");
+				}
+			});*/
+
+			/* ########################## New PDP JS Added ########################*/
+
+			//add to wishlist validation
+			if(jQuery('.attribute-color').length > 0){
+				jQuery('.towishlist').attr('disabled','disabled');
+				jQuery('#product-addtocart-button').attr('disabled','disabled');
+				//jQuery('#product-addtocart-button').find('span').text('Loading..');
+				//enable code written in vairants.phtml
+			} 
+			//add loading class to variant to prevent selection on ready
+			jQuery('.attribute-color').each(function(){
+				jQuery(this).find('.img-label').addClass('variant-loading');
+			})
+			
+			//custom validation for add to cart
+			//AddToCartValidate();
+
+			function AddToCartValidate(){
+				jQuery('#product_addtocart_form').submit(function(e){
+					if(jQuery('.attribute-color').length > 0){
+						jQuery(this).unbind('submit');						
+						if(jQuery('[name="super_attribute[93]"]').is(':checked') == false){
+							jQuery('.show-color-image .mage-error').remove();
+							jQuery('.show-color-image').append('<div class="mage-error">Please select color.</div>');
+							setTimeout(function(){			
+								jQuery('.show-color-image .mage-error').fadeOut();
+							},4000);
+						}else if(jQuery('.product-options-wrapper').find('select.super-attribute-select').val() == ''){
+							jQuery('#product-options-wrapper .mage-error').remove();
+							jQuery('#product-options-wrapper').append('<div class="mage-error">Please select size.</div>');
+							setTimeout(function(){			
+								jQuery('#product-options-wrapper .mage-error').fadeOut();
+							},4000);
+						}else{
+							console.log('Proceed to add product.')
+							//jQuery('#product-addtocart-button').find('span').text('Adding...')
+							jQuery(this).bind('submit');
+						}
+					}					
+				})
+			}
+			
+
+			$(window).load(function(){
+				jQuery('#product-addtocart-button').removeAttr('disabled');
+				//jQuery('#product-addtocart-button:not([title="Pre-Order"])').find('span').text('Add to Bag');
+				//jQuery('#product-addtocart-button[title="Pre-Order"]').find('span').text('Pre-Order');
+				// removing loader on load
+				jQuery('.attribute-color').each(function(){
+					jQuery(this).find('.img-label').removeClass('variant-loading');
+				})
+			})
+			
+			$(window).resize(function(){
+				//jQuery('#product-addtocart-button:not([title="Pre-Order"])').find('span').text('Add to Bag');
+				//jQuery('#product-addtocart-button[title="Pre-Order"]').find('span').text('Pre-Order');
+			})
+		})(jQuery);
+	});
+</script>

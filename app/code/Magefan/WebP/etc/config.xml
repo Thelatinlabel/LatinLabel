@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mfwebp>
+            <general>
+                <enabled>0</enabled>
+                <quality>85</quality>
+                <mfmodule>WebP</mfmodule>
+                <creation_options>0</creation_options>
+            </general>
+            <advanced_settings>
+                <convert_exists_picture>0</convert_exists_picture>
+                <convert_background_images>0</convert_background_images>
+            </advanced_settings>
+        </mfwebp>
+    </default>
+</config>

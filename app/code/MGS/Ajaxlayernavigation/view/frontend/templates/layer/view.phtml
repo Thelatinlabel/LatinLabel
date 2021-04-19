@@ -1,0 +1,232 @@
+<?php $_helper = $this->helper('MGS\Ajaxlayernavigation\Helper\Config');?>
+<?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $fullActionName = $objectManager->get('Magento\Framework\App\Request\Http')->getFullActionName();
+    $productCollection = '';
+    if($fullActionName != "catalogsearch_result_index"){
+        $category = $objectManager->get('Magento\Framework\Registry')->registry('current_category'); 
+        $parentCategoryObj = $category->getParentCategory($category->getId());
+        if($parentCategoryObj->getName() == 'Designers' || $parentCategoryObj->getUrlKey() == 'designers'):
+            $helper = $this->helper('Mobikasa\Filters\Helper\ProductCollection');
+            $productCollection = $helper->getProductCollection($category->getId()); ?>
+            <style type="text/css">._Designer{display: none !important;}
+            .Designer{display: none !important;}</style>
+        <?php endif;
+    }
+?>
+<?php if ($block->canShowBlock()): ?>
+    <div class="block filter mgs-filter" id="layered-filter-block">
+        <div class="block-title filter-title">
+            <strong><?php /* @escapeNotVerified */ echo __('Shop By') ?></strong>
+        </div>
+
+        <div class="block-content filter-content">
+            <?php 
+                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                $stateFilter = $objectManager->create('\Magento\LayeredNavigation\Block\Navigation\State');
+                $selectedFilters = $stateFilter->getActiveFilters();
+            ?>
+            <?php if (!empty($selectedFilters)): ?>
+                <div class="state-item block-actions filter-actions"><a
+                    class="action btn btn-xs btn-primary clear filter-clear"
+                    title="<?php /* @escapeNotVerified */ echo __('Clear All') ?>"
+                    href="<?php /* @escapeNotVerified */ echo $_helper->getClearAllUrl() ?>">
+                <span><?php /* @escapeNotVerified */ echo __('Clear All') ?></span></a></div>
+            <?php endif; ?>
+
+            <?php echo $block->getChildHtml('state') ?>
+
+            <?php //if ($block->getLayer()->getState()->getFilters()): ?>
+            <?php if (false): ?>
+                <div class="block-actions filter-actions">
+                    <a href="<?php /* @escapeNotVerified */ echo $block->getClearUrl() ?>" class="action btn btn-xs btn-primary clear filter-clear"><span><?php /* @escapeNotVerified */ echo __('Clear All') ?></span></a>
+                </div>
+            <?php endif; ?>
+            <?php $wrapOptions = false; ?>
+            <?php foreach ($block->getFilters() as $filter): ?>
+                <?php if (!$wrapOptions): ?>
+                    <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?php /* @escapeNotVerified */ echo __('FILTER BY') ?></strong>
+
+                    <dl class="filter-options" id="narrow-by-list">
+                    <?php if($productCollection):?>    
+                    <dt role="heading" aria-level="3" class="filter-options-title inactive">CATEGORY</dt>
+                    <dd class="filter-options-content inactive _Cat"> 
+                    <ol class="items">
+                    <?php 
+                    $checked = '';
+                    $_finalkey = '';
+                    foreach ($productCollection as $key => $value): 
+                            if(empty($_GET['cat'])){
+                              $_finalkey = $key;  
+                              $_finalCat = $category->getUrl().'?cat='.$_finalkey;
+                              }else{
+                                $_finalkey = $_GET['cat'].','.$key;
+                                $selectedCategories = explode(',', $_GET['cat']); 
+                                if (in_array($key, $selectedCategories)){
+                                    $checked = ' checked';
+                                    $to_remove = array($key);
+                                    $result = array_diff($selectedCategories, $to_remove);
+                                    $_finalkey = implode($result, ',');
+                                }else{
+                                  $checked = '';  
+                                }
+                            
+                              $_finalCat = $category->getUrl().'?cat='.$_finalkey;
+                            } 
+                           if(!empty($_GET['color']) || !empty($_GET['size']) || !empty($_GET['price'])){
+                                if (strpos($_SERVER['REQUEST_URI'], 'cat') !== false) {
+                                   $current_url = explode("?", $_SERVER['REQUEST_URI']);
+                                   $str_url = (explode("&",$current_url[1]));
+                                   $_to_remove = array($str_url[0]);
+                                   $_result = array_diff($str_url, $_to_remove);
+                                   
+                                   $_final_result = implode($_result, '&');
+                                   $_finalCat = $_finalCat.'&'.$_final_result;
+                                }else{
+                                   $current_url = explode("?", $_SERVER['REQUEST_URI']);
+                                    $_finalCat = $_finalCat.'&'.$current_url[1]; 
+                                }
+                           }
+                           if($key == '64'){
+                                $value = 'New In Accessories';
+                           }else if($key == '38'){
+                                $value = 'New In Shoes';
+                           }else if($key == '27'){
+                                $value = 'New In Clothing';
+                           }else if($key == '53'){
+                                $value = 'New In Bags';
+                           }else if($key == '75'){
+                                $value = 'New In Jewellery';
+                           }
+
+                            
+                        ?>
+                            <li class="item<?php echo $checked; ?>">
+                                <div class="mgs-filter-item-checkbox">
+                                    <a href="<?php echo $_finalCat; ?>">
+                                        <input type="checkbox" class="mgs-layered-checkbox" <?php echo $checked; ?>>
+                                        <div class="mgs-content"></div>
+                                    </a>
+                                </div>
+                                <a class="mgs-ajax-layer-item" href="<?php echo $_finalCat; ?>"><?php echo $value; ?></a>
+                            </li>
+                     <?php endforeach; ?>       
+                        </ol>
+                    </dd>
+                <?php endif; ?>
+                <?php $wrapOptions = true; endif; ?>
+                    <?php if ($filter->getItemsCount()): ?>
+                        <?php
+                            if ($filter->getFilterItemsCount()) {
+                                $itemIds = $filter->getFilterItemsCount();
+                                $attributteId = $filter->getAttributeModel()->getAttributeId();
+                                $itemProductIds[$attributteId] = $itemIds[$attributteId];
+                            }
+                            $class = 'inactive';
+                            if (method_exists($filter, "isActive") && $filter->isActive()) {
+                                $class = 'active';
+                            }
+                        ?>
+                        <?php if(!(isset($_GET['price']) && $filter->getName()=='Price')) { ?>
+                        <dt role="heading" aria-level="3" class="filter-options-title <?php echo $filter->getName();?> <?php echo $class ?>"><?php echo $block->escapeHtml(__($filter->getName())) ?></dt>
+                        <dd class="filter-options-content <?php echo $class ?> <?php echo '_'.$filter->getName();?>"> 
+                            <?php 
+                            $isPrice = false;
+                            if($_helper->usePriceSlide()){ 
+                                $maxPrice = 0;
+                                $minPrice = 0;
+
+                                if ($filter->hasAttributeModel()) {
+                                    $attributeModel = $filter->getAttributeModel();
+                                    if ($attributeModel->getAttributeCode() == 'price') { 
+                                        $isPrice = true;
+                                        $minPrice = $filter->getMinPrice();
+                                        $maxPrice = $filter->getMaxPrice();
+                                    }
+                                }
+                            }
+                            
+                            if($filter->getName() == 'Price'){ ?>
+
+                                <ol class="items">
+                            <?php 
+                             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                             $category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');
+
+                             if(empty($_GET)){
+                                $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?price";
+                             }else{
+                                $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."&price";
+                             }
+                             
+
+                            if(!(isset($_GET['price']) && $filterItem->getName()=='Price')) { 
+                                ?>
+                                <li class="item">
+                                    <div class="mgs-filter-item-checkbox">
+                                            <a href="<?php echo $actual_link; ?>=-100">
+                                                <input type="checkbox" class="mgs-layered-checkbox">
+                                                <div class="mgs-content"></div>
+                                            </a>
+                                    </div>
+                                    <a class="mgs-ajax-layer-item" href="<?php echo $actual_link; ?>=-100">
+                                     <span class="price">$0.00</span> - <span class="price">$99</span></a>
+                                </li>
+                                <li class="item">
+                                    <div class="mgs-filter-item-checkbox">
+                                            <a href="<?php echo $actual_link; ?>=100-200">
+                                                <input type="checkbox" class="mgs-layered-checkbox">
+                                                <div class="mgs-content"></div>
+                                            </a>
+                                    </div>
+                                    <a class="mgs-ajax-layer-item" href="<?php echo $actual_link; ?>=100-200">
+                                     <span class="price">$100.00</span> - <span class="price">$199.99</span></a>
+                                </li>
+                                <li class="item">
+                                    <div class="mgs-filter-item-checkbox">
+                                            <a href="<?php echo $actual_link; ?>=200-500">
+                                                <input type="checkbox" class="mgs-layered-checkbox">
+                                                <div class="mgs-content"></div>
+                                            </a>
+                                    </div>
+                                    <a class="mgs-ajax-layer-item" href="<?php echo $actual_link; ?>=200-500">
+                                     <span class="price">$200.00</span> - <span class="price">$500.00</span></a>
+                                </li>
+                                <li class="item">
+                                    <div class="mgs-filter-item-checkbox">
+                                            <a href="<?php echo $actual_link; ?>=500-">
+                                                <input type="checkbox" class="mgs-layered-checkbox">
+                                                <div class="mgs-content"></div>
+                                            </a>
+                                    </div>
+                                    <a class="mgs-ajax-layer-item" href="<?php echo $actual_link; ?>=500-">
+                                        <span class="price">$500.00</span> and above</a>
+                                </li> 
+                            <?php } ?>
+                        </ol>
+                        <?php } ?>
+
+                        <?php if ($isPrice) : ?>
+                            <div>
+                                <input type="text" id="price-range-slider" data-from="<?php echo $minPrice ?>" data-to="<?php echo $maxPrice ?>" name="price-range-slider" />
+                            </div>
+                        <?php else : ?>
+                            <?php /* @escapeNotVerified */ echo $block->getChildBlock('renderer')->render($filter); ?>
+                        <?php endif; ?> 
+                        </dd>
+                        <?php } ?> 
+                    <?php endif; ?>
+            <?php endforeach; ?>
+            <?php if ($wrapOptions): ?>
+                <div class="close-filter">Apply Filter</div>
+                </dl>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    
+    
+<?php endif; ?>
+
+
+

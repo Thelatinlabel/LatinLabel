@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Info $block */
+
+/** @var \Magento\Wishlist\Model\Item $item */
+$item = $block->getItem();
+$product = $item->getProduct();
+$_getbrand = $product->getResource()->getAttribute('mgs_brand'); 
+$_getbrandValue = $_getbrand->getFrontend()->getValue($product);
+?>
+<strong class="product-item-name">
+<?php if($_getbrandValue){ ?>
+	<h4 class="desinger_name_wish"><?php echo $_getbrandValue; ?></h5>
+<?php } ?>	
+    <a href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?= $block->escapeHtmlAttr($product->getName()) ?>" class="product-item-link">
+        <?= $block->escapeHtml($product->getName()) ?>
+    </a>
+</strong>

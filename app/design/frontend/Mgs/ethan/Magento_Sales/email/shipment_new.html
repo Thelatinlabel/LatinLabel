@@ -1,0 +1,200 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Your %store_name order has shipped" store_name=$store.frontend_name}} @-->
+<!--@vars {
+"var formattedBillingAddress|raw":"Billing Address",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL",
+"var order_data.customer_name":"Customer Name",
+"var order.increment_id":"Order Id",
+"var payment_html|raw":"Payment Details",
+"var comment|escape|nl2br":"Shipment Comment",
+"var shipment.increment_id":"Shipment Id",
+"layout handle=\"sales_email_order_shipment_items\" shipment=$shipment order=$order":"Shipment Items Grid",
+"block class='Magento\\\\Framework\\\\View\\\\Element\\\\Template' area='frontend' template='Magento_Sales::email\/shipment\/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
+"var formattedShippingAddress|raw":"Shipping Address",
+"var order.shipping_description":"Shipping Description",
+"var store.frontend_name":"Store Frontend Name",
+"var store_phone":"Store Phone",
+"var store_email":"Store Email",
+"var store_hours":"Store Hours",
+"var order_data.is_not_virtual": "Order Type",
+"var shipment": "Shipment",
+"var order": "Order"
+} @-->
+{{template config_path="design/email/header_template"}}
+<table style="width: 100%; border: 3px solid #F4A63B; background-color: #38121342; margin-top:-5px;">
+    <tr>
+        <td>
+            <table style="max-width: 380px; margin:0 auto; float: none; text-align: center;  color: #1A1818;">
+                <tr>
+                    <td>
+                        <h3 style="letter-spacing: 0px; line-height: normal; margin-bottom: 0px; margin-top:42px; font-family: serif; font-size:24.08px;">Hello 
+{{var order.getShippingAddress().getFirstName()}} {{var order.getShippingAddress().getLastName()}}</h3>
+                        <h3 style="letter-spacing: 0px; line-height: normal; font-family: serif; font-size:24.08px; margin-top:0px;">Your order has been shipped!</h3>
+                        <p style="font-size: 14px; line-height: 20px; margin-bottom: 10px; margin-top:12px;">We are pleased to tell you that the following items were recently shipped</p>
+                        {{trans '<a href="%account_url" style="margin:15.95px auto 18.47px; width: 205px; text-decoration: none; color:#1A1818; background-color:#F4A63B ; display:block; letter-spacing: 2.05px; text-transform:uppercase; font-weight:bold;font-size:12px; letter-spacing: 2.05; line-height: 14.4px; padding-top: 8px; padding-bottom: 8px;">TRACK YOUR ORDER</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}
+                        <p style="font-size: 14px; line-height: 20px; font-style: italic; margin-bottom: 23px; margin-top:0px;">We sent each item as it is available. If items you ordered are not listed below, you will receive a further email once they have been sent.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<table style="width: 100%; border:1px solid #ddd;">
+    <tr>
+        <td>
+            <table style="width:100%; margin-top:-2px;  -webkit-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.18); -moz-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.18); box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.18);">
+                <tr>
+                    <td colspan="4">
+                        <h2 style="font-size:16px; font-family: 'Lato', sans-serif; width:100%; padding:0 12px; font-weight: bold; letter-spacing: 2.74px; margin-top:28.12px; margin-bottom: 14.81px;">ORDER DETAILS</h2>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+<table style="width: 100%; border:1px solid #ddd; margin-top:-2px; padding:10px;">
+    <tr>
+        <td>
+            <table style="width:100%;">
+                <tr>
+                    <td style="display: none;" colspan="4">
+                        <p class="greeting" style="text-transform: capitalize;">{{trans "%name," name=$order_data.customer_name}}</p>
+                        <p>
+                            {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
+                            {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}
+                            {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
+                            {{depend store_hours}}
+                                {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                            {{/depend}}
+                        </p> 
+                        <p>{{trans "Your shipping confirmation is below. Thank you again for your business."}}</p>
+                        <h2 style="font-size:18px; font-family: 'Lato', sans-serif; width:95%; padding:0; font-weight: bold; letter-spacing: 2.74px; margin-top:25px; margin-bottom: 20px;">{{trans "Your Shipment #%shipment_id for Order #%order_id" shipment_id=$shipment.increment_id order_id=$order.increment_id}}</h2>
+                     </td>
+                     <td colspan="4">
+                        <h2 style="font-size:18px; font-family: 'Lato', sans-serif; width:95%; padding:0; font-weight: bold; letter-spacing: 2.74px; margin-top:25px; margin-bottom: 20px;">{{trans "Your Shipment #%shipment_id for Order #%order_id" shipment_id=$shipment.increment_id order_id=$order.increment_id}}</h2>
+                      </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="product-grid">
+                        <!-- Product grid -->   
+                        {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border-top:1px solid #ddd; padding-top:10px; padding-bottom:10px; border-bottom:1px solid #ddd;">
+                        <!-- Product grid -->   
+                        {{layout handle="sales_email_order_shipment_track" shipment=$shipment order=$order}}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <h2 style="font-size:16px; font-family: 'Lato', sans-serif; width:95%; padding:0; font-weight: bold; letter-spacing: 2.74px; margin-top:25px; margin-bottom: 25px;">SHIPPING METHOD</h2>
+                        {{depend order_data.is_not_virtual}}
+                            <p>{{var order.shipping_description}}</p>
+                            {{if shipping_msg}}
+                            <p>{{var shipping_msg}}</p>
+                            {{/if}}
+                        {{/depend}}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;">
+                        {{depend order_data.is_not_virtual}}
+                        <h2 style="font-size:15px; font-family: 'Lato', sans-serif; width:95%; padding:0; font-weight: bold; letter-spacing: 2.74px; margin-top:25px; margin-bottom: 0px;">SHIPPING ADDRESS</h2>
+                        <hr/>
+                        <table style="width:100%; margin-top:10px;">
+                            <tr>
+                                <td style="border: 3px solid #F4A63B; padding:25px 15px;">
+                                    <div style="min-height: 170px;"><p>{{var formattedShippingAddress|raw}}</p></div>
+                                </td>
+                            </tr>
+                        </table>
+                        {{/depend}}
+                    </td>
+                    <td style="width:50%;">
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+<table style="display:none;">
+    <tr class="email-intro">
+        <td>
+            <p class="greeting" style="text-transform: capitalize;">{{trans "%name," name=$order_data.customer_name}}</p>
+            <p>
+                {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
+                {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}
+                {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
+                {{depend store_hours}}
+                    {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                {{/depend}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-summary">
+        <td>
+            <p>{{trans "Your shipping confirmation is below. Thank you again for your business."}}</p>
+
+            <h1>{{trans "Your Shipment #%shipment_id for Order #%order_id" shipment_id=$shipment.increment_id order_id=$order.increment_id}}</h1>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            {{depend comment}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var comment|escape|nl2br}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+            {{layout handle="sales_email_order_shipment_track" shipment=$shipment order=$order}}
+            <table class="order-details">
+                <tr>
+                    <td class="address-details">
+                        <h3>{{trans "Billing Info"}}</h3>
+                        <p>{{var formattedBillingAddress|raw}}</p>
+                    </td>
+                    {{depend order_data.is_not_virtual}}
+                    <td class="address-details">
+                        <h3>{{trans "Shipping Info"}}</h3>
+                        <p>{{var formattedShippingAddress|raw}}</p>
+                    </td>
+                    {{/depend}}
+                </tr>
+                <tr>
+                    <td class="method-info">
+                        <h3>{{trans "Payment Method"}}</h3>
+                        {{var payment_html|raw}}
+                    </td>
+                    {{depend order_data.is_not_virtual}}
+                    <td class="method-info">
+                        <h3>{{trans "Shipping Method"}}</h3>
+                        <p>{{var order.shipping_description}}</p>
+                    </td>
+                    {{/depend}}
+                </tr>
+            </table>
+            {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+$helper =  \Magento\Framework\App\ObjectManager::getInstance()->get('MGS\Mpanel\Helper\Data');
+$url = $helper->getCssUrl();
+$canUsePanel = $helper->acceptToUsePanel();
+?>
+<!doctype html>
+<html <?php /* @escapeNotVerified */ echo $htmlAttributes ?>>
+    <head <?php /* @escapeNotVerified */ echo $headAttributes ?>>
+		<script>
+			var WEB_URL = "<?php echo $helper->getUrlBuilder()->getUrl() ?>";
+		</script>
+        <?php /* @escapeNotVerified */ echo $requireJs ?>
+        <meta name="google-site-verification" content="QucwEhgLYZipKnDMuk0OQfVqMJoqhkrkQrWgYKB3pDs" />
+        <?php /* @escapeNotVerified */ echo $headContent ?>
+        <?php /* @escapeNotVerified */ echo $headAdditional ?>
+		<?php echo $helper->getLinksFont() ?>
+		<link  rel="stylesheet" type="text/css"  media="all" href="<?php echo $url ?>" /> 
+		<?php if($helper->showButton()): ?>
+		<link  rel="stylesheet" type="text/css"  media="all" href="<?php echo $helper->getPanelCssUrl() ?>" /> 
+		<?php endif ?>
+		<!-- Google Tag Manager -->
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-TVW7H6N');</script>
+		<!-- End Google Tag Manager -->
+
+    </head>
+    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": { "icon": "<?php /* @escapeNotVerified */ echo $loaderIcon; ?>"}}' <?php /* @escapeNotVerified */ echo $bodyAttributes ?>>
+    	<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TVW7H6N"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
+		<?php if($helper->showButton() && !$helper->isPopup()): ?>
+			<?php echo $topPanel ?>
+		<?php endif ?>
+		 <?php /* @escapeNotVerified */ echo $helper->convertContent($layoutContent, $builderContent) ?>
+		
+		<?php if($canUsePanel): ?>
+			<script  type="text/javascript" src="<?php echo $this->getViewFileUrl('MGS_Mpanel::js/panel.js') ?>"></script>
+		<?php endif ?>
+    </body>
+</html>

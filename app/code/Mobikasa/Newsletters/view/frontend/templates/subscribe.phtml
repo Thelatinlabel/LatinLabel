@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Newsletter\Block\Subscribe $block */
+
+?>
+<div class="block newsletter">
+    <div class="content">
+        <form class="form subscribe"
+            novalidate
+            action="<?php /* @escapeNotVerified */ echo $block->getFormActionUrl() ?>"
+            method="post"
+            data-mage-init='{"validation": {"errorClass": "mage-error"}}'
+            id="newsletter-validate-detail-footer">
+            <div class="field form-group newsletter">
+                <div class="control">
+                    <input name="email" type="email" id="newsletter-footer"
+                                placeholder="<?php /* @escapeNotVerified */ echo __('Enter Email Address') ?>"
+                                data-validate="{required:true, 'validate-email':true}"/>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button class="action subscribe btn btn-primary" title="<?php /* @escapeNotVerified */ echo __('Subscribe') ?>" type="submit">
+                    <span><?php /* @escapeNotVerified */ echo __('Subscribe') ?></span>
+                </button>
+            </div>
+            <div class="popup-text">Select your preferences</div>
+            <div class="subscribe-radio">
+                <span class="option"><input type="radio" name="category" id="women" value="women" required>
+                <label for="women">Women</label></span>
+                <span class="option"><input type="radio" name="category" id="men" value="men" required>
+                <label for="men">men</label></span>
+                <span class="option"><input type="radio" name="category" id="kids" value="kids" required>
+                <label for="kids">kids</label></span>
+                <span class="option"><input type="radio" name="category" id="home-deco" value="home-deco" required>
+                <label for="home-deco">Home Deco</label></span>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+     

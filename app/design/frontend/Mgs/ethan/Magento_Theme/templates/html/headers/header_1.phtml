@@ -1,0 +1,194 @@
+<?php $block = $this->getBlock() ?>
+
+<?php $helper = $this->helper('MGS\Mpanel\Helper\Data') ?>
+<?php $canUsePanel = $helper->acceptToUsePanel() ?>
+
+<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$baseUrl =  $objectManager
+                        ->get('Magento\Store\Model\StoreManagerInterface')
+                        ->getStore()
+                        ->getBaseUrl();
+ ?>
+<?php $customerSession = $objectManager->create('Magento\Customer\Model\Session'); ?>
+<?php $customerUrl = $objectManager->create('Magento\Customer\Model\Url'); ?>
+
+<?php $topLeftBlock = $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('header_1_top_left_link')->setCanUsePanel($canUsePanel)->toHtml(); ?>
+<div class="top-header-content">
+	<div class="container">
+		<?php echo $block->getChildHtml('store_language') ?>
+		
+		<?php echo $block->getChildHtml('currency') ?>
+		<!-- Static block: header_1_top_left_link -->
+		<?php if($topLeftBlock): ?>
+			<div class="top-custom-link">
+				<?php echo $topLeftBlock; ?>
+			</div>
+		<?php endif ?>
+	</div>
+</div>
+
+<div class="middle-header-content">
+	<div class="container">
+		<div class="d-flex flex-wrap add-cart-header">
+			<div class="top-menu">
+
+				<ul class="text-left">
+					<li>
+						<a href='<?php echo $baseUrl; ?>'>Women</a>
+					</li>
+					<?php 
+						$categoryFactory = $objectManager->create('\Magento\Catalog\Model\CategoryFactory');
+						$collectionData = $categoryFactory->create()
+				                          ->getCollection()
+				                          ->addAttributeToFilter('include_in_collection',1);
+						  foreach ($collectionData as $key => $value){
+						  	$getCatData = $objectManager->create('Magento\Catalog\Model\Category')
+						      ->load($value->getEntityId()); 
+					?>
+					<li>
+						<a href='<?php echo $getCatData->getUrl(); ?>'><?php echo $getCatData->getName(); ?></a>
+					</li>
+					<?php } ?> 
+				</ul>
+			</div>
+			<div class="logo-section">
+				<?php echo $block->getChildHtml('logo') ?>
+			</div>
+			<div class="right-section">
+				<?php echo $block->getChildHtml('top.search') ?>
+				<div class="login-custom-link">
+					<?php if($customerSession->isLoggedIn()): ?>
+						<a href="<?php echo $customerUrl->getAccountUrl(); ?>"><span class="icomooon-latin-user" aria-hidden="true"></span><?php echo $customerSession->getCustomer()->getFirstname().' '.$customerSession->getCustomer()->getLastname(); ?></a>
+						<div class="open_account">
+							<ul>
+								<li>
+									<a href="/customer/account/">My Account</a>
+								</li>
+								<li>
+									<a href="/sales/order/history/">My Order</a>
+								</li>
+								<li>
+									<a href="/aw_rma/customer/">My returns</a>
+								</li>
+								<li>
+								<a href="<?php echo $customerUrl->getLogoutUrl(); ?>"><?php echo __('Logout'); ?></a>
+								</li>
+							</ul>
+					</div>
+					<?php else: ?>
+						<a href="<?php echo $customerUrl->getLoginUrl(); ?>"><?php echo __('Login / '); ?><span class="icomooon-latin-user" aria-hidden="true"></span></a>
+					<?php endif ?>
+				</div>
+				<div class="wishlist">
+				<?php if($customerSession->isLoggedIn()): ?>
+				<a href="<?php echo $this->getUrl('wishlist') ?>" class="favoriteimg imagesize hiddeni">
+					<span class="icomooon-latin-wishlist" aria-hidden="true"></span>
+		          	<span class="wishlist" data-bind="scope: 'wishlist'">
+					  <?php
+					if($customerSession->isLoggedIn()) {
+						$wishlist = $objectManager->get('\Magento\Wishlist\Model\Wishlist');
+						$wishlist_collection = $wishlist->loadByCustomerId($customerSession->getCustomer()->getId(), true)->getItemCollection();
+						echo count($wishlist_collection);
+					} ?>
+		          	</span>
+		          	
+		        </a>
+				<?php else: ?>
+					<a href="javascript:void(0)" class="favoriteimg imagesize hiddeni click_whichlist">
+					<span class="icomooon-latin-wishlist" aria-hidden="true"></span>
+		          	<span class="wishlist" data-bind="scope: 'wishlist'">
+		          	  <!-- ko if: wishlist().counter -->
+		                <span data-bind="text: wishlist().counter" class="counter qty"></span>
+		              <!-- /ko -->
+		          	</span>
+		        </a>
+				<?php endif ?>
+				<script type="text/x-magento-init">
+					{
+						"*": {
+							"Magento_Ui/js/core/app": {
+								"components": {
+									"wishlist": {
+										"component": "Magento_Wishlist/js/view/wishlist"
+									}
+								}
+							}
+						}
+					}
+				</script>
+				<?php if($customerSession->isLoggedIn()): ?>
+				<?php else: ?>
+					<div class="wishlist-popup">
+						<span class="ddl-title">MY Wishlist</span>
+						<p class="empty">Please register or sign in if you have an account to enjoy adding products to your wishlist.</p>
+					</div>
+				<?php endif ?>
+				</div>
+				<?php echo $block->getChildHtml('minicart') ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php if($customerSession->isLoggedIn()): ?>
+<?php else: ?>
+<div class="open_wishlist hidden">
+	<div class="inner_wishlist">
+		<div class="cross">x</div>
+		<div class="wishlist_text">
+			<div>Please register or Sign in if you have an account to enjoy adding products to your wishlist</div>
+		</div>
+	</div>
+</div>
+<?php endif ?>
+<div class="bottom-header-content">
+	<div class="container">
+		<div class="menu-content">
+			<button class="action nav-toggle hidden-lg"><span class="fa fa-bars" aria-hidden="true"></span></button>
+			<div class="hidden-md hidden-lg mobile-serch"></div>
+			<?php echo $block->getChildHtml('logo') ?>
+			<div class="hidden-md hidden-lg mobile-minicart">								
+			</div>
+			<div class="megamenu-content<?php if($block->getChildHtml('megamenu')!=''): ?> mgs-menu<?php else: ?> mgt-menu<?php endif ?>">
+				<!-- <ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#main-Menucontent"><?//php echo __('Menu'); ?></a></li>
+					<li><a data-toggle="tab" href="#main-Accountcontent"><?php //echo __('My Account'); ?></a></li>
+				</ul> -->
+				<div class="tab-content">
+					<div id="main-Menucontent" class="tab-pane active">
+						<?php if($block->getChildHtml('megamenu')!=''): ?>
+							<?php echo $block->getChildHtml('megamenu') ?>
+						<?php else: ?>
+							<?php echo $block->getChildHtml('catalog.topnav') ?>
+						<?php endif ?>
+					</div>
+					<div class="account">
+						<ul>
+						<?php if($customerSession->isLoggedIn()): ?>
+							<li class="login-section">
+								<a href="<?php echo $customerUrl->getAccountUrl(); ?>"><?php echo $customerSession->getCustomer()->getFirstname().' '.$customerSession->getCustomer()->getLastname(); ?></a>
+							</li>
+							<li class="login-section">
+								<a href="<?php echo $customerUrl->getLogoutUrl(); ?>"><?php echo __('Logout'); ?></a>
+							</li>
+						<?php else: ?>
+							<li class="text-center">
+								<a href="<?php echo $customerUrl->getLoginUrl(); ?>"><?php echo __('Sign In'); ?></a> | <a href="<?php echo $customerUrl->getLoginUrl(); ?>"><?php echo __('Sign Up'); ?></a>
+							</li>
+						<?php endif ?>	
+							<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('header_block_extra_link')->setCanUsePanel($canUsePanel)->toHtml() ?>	
+						</ul>
+					</div>
+					<!-- <div id="main-Accountcontent" class="tab-pane">
+						<?php //echo $block->getChildHtml('top.links') ?>
+						<?php //if($topLeftBlock): ?>
+							<div class="top-custom-link">
+								<?php //echo $topLeftBlock; ?>
+							</div>
+						<?php //endif ?>
+					</div> -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<button class="action close-nav-button"><span class="fa fa-times" aria-hidden="true"></span></button>

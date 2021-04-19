@@ -1,0 +1,236 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/** @var $block \Magento\Framework\View\Element\Template */
+?>
+
+
+<script data-rocketjavascript="false">
+    var MagefanWebP = {
+
+        _canUseWebP: null,
+
+        getUserAgentInfo: function(){
+            try {
+                var ua = navigator.userAgent,
+                    tem,
+                    M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+                if (/trident/i.test(M[1])) {
+                    tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                    return ['IE', (tem[1] || '')];
+                }
+                if (M[1] === 'Chrome') {
+                    tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+                    if (tem != null) {
+                        tem = tem.slice(1);
+                        tem[0] = tem[0].replace('OPR', 'Opera');
+                        return tem;
+                    }
+                }
+                M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+                if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+                return M;
+             } catch (e) {
+                return ['', 0];
+             }
+        },
+
+        canUseWebP: function(){
+
+            if (null !== this._canUseWebP){
+                return this._canUseWebP;
+            }
+
+            try {
+                var elem = document.createElement('canvas');
+                if (!!(elem.getContext && elem.getContext('2d'))) {
+                    var r = (elem.toDataURL('image/webp').indexOf('data:image/webp') == 0);
+                    if (!r) {
+                        var ua = this.getUserAgentInfo();
+                        if (ua && ua.length > 1) {
+                            ua[0] = ua[0].toLowerCase();
+                            if ('firefox' == ua[0] && parseInt(ua[1]) >= 65) {
+                                this._canUseWebP = true;
+                                return this._canUseWebP;
+                            }
+                            if ('edge' == ua[0] && parseInt(ua[1]) >= 18) {
+                                this._canUseWebP = true;
+                                return this._canUseWebP;
+                            }
+                        }
+                    }
+
+                    this._canUseWebP = r;
+                    return this._canUseWebP;
+                }
+                this._canUseWebP = false;
+                return this._canUseWebP;
+            } catch (e) {
+                console.log(e);
+                this._canUseWebP = false;
+                return this._canUseWebP;
+            }
+        },
+
+        getOriginWebPImage: function(src) {
+
+            if (src.indexOf('mf_webp') == -1) {
+                return src;
+            }
+
+            var $array = src.split('/');
+            var $imageFormat = '';
+
+            for (var i = 0; i < $array.length; i++) {
+                if ($array[i] == "mf_webp") {
+                    $imageFormat = $array[i + 1];
+                    $array.splice(i, 3);
+                    break;
+                }
+            }
+            src = $array.join('/');
+            return src.replace('.webp', '.' + $imageFormat);
+        }
+    };
+
+    /* MagicToolboxContainer Fix */
+    function MagefanWebPMagicToolboxContainerFix()
+    {
+        if (!MagefanWebP.canUseWebP()) {
+            (function(){
+                var i;
+                var els = document.querySelectorAll(".MagicToolboxContainer a, .MagicToolboxContainer img");
+                if (!els) return;
+                var el;
+                for (i=0; i<els.length; i++) {
+                    el = els[i];
+                    if (el.href) {
+                        el.href = MagefanWebP.getOriginWebPImage(el.href);
+                    }
+
+                    if (el.getAttribute('webpimg')) {
+                        el.src = MagefanWebP.getOriginWebPImage(el.getAttribute('webpimg'));
+                    } else {
+                        if (el.src) {
+                            el.src = MagefanWebP.getOriginWebPImage(el.src);
+                        }
+                    }
+
+                    if (el.dataset && el.dataset.image) {
+                        el.dataset.image = MagefanWebP.getOriginWebPImage(el.dataset.image);
+                    }
+
+                }
+            })();
+        } else {
+            replacePixelMagicToolbox();
+            checkIfPixelReplaced();
+        }
+    }
+
+    function replacePixelMagicToolbox() {
+        (function() {
+            var i, els = document.querySelectorAll(".MagicToolboxContainer img");
+
+            if (!els) return;
+            var el;
+
+            for (i=0; i<els.length; i++) {
+                el = els[i];
+
+                if (el.getAttribute('webpimg')) {
+                    el.src = el.getAttribute('webpimg');
+                }
+            }
+        })();
+    }
+
+    function checkIfPixelReplaced() {
+        var intervalCounter = 0,
+            waitForMagicToolbox = setInterval(function() {
+                if (document.querySelectorAll('figure img[src$="/p.jpg"]').length) {
+                   replacePixelMagicToolbox();
+                   clearInterval(waitForMagicToolbox);
+                }
+
+                if (intervalCounter > 10) {
+                    clearInterval(waitForMagicToolbox);
+                }
+
+                intervalCounter++;
+            }, 500);
+    }
+
+    document.addEventListener("DOMContentLoaded", function(){
+        if (!MagefanWebP.canUseWebP()) {
+            document.body.className += ' no-webp ';
+        } else {
+            document.body.className += ' webp-supported ';
+        }
+    });
+</script>
+<script>
+    require(['jquery', 'domReady!'], function($){
+        if (!MagefanWebP.canUseWebP()) {
+            /* Replace some custom webp images with original one if webp is not supported */
+            /* Can add <a> tag in future as well */
+            setInterval(function(){
+                $("img[src$='.webp']:not(.no-origin-webp-img)").each(function(){
+                    var $t = $(this);
+                    var scr = $t.attr('src');
+                    var newScr = MagefanWebP.getOriginWebPImage(scr);
+
+                    if (scr != newScr) {
+                        $t.attr('src', newScr);
+                    } else {
+                        $t.addClass('no-origin-webp-img');
+                    }
+                });
+            }, 1000);
+        }
+
+        function processLazyPictureImg()
+        {
+            var $t = $(this);
+            var src = $t.attr('src');
+            var keys = ['original', 'src', 'lazyload'];
+            var original, _original;
+            for (var i=0;i<keys.length;i++) {
+                _original = $t.data(keys[i]);
+                if (_original) {
+                    original = _original;
+                    break;
+                }
+            }
+            if (original == src) {
+
+                if ($t.data('mf-lazy-picture-img')) return;
+                $t.data('mf-lazy-picture-img', 1);
+
+                $t.parent().find('source').each(function(){
+                    var $s = $(this);
+                    var srcset = $s.attr('srcset');
+                    var originalset = $s.data('originalset');
+                    if (originalset != srcset) {
+                        $s.attr('srcset', originalset);
+                        $s.removeClass('lazyload');
+                    }
+                });
+
+                $("picture img[src='"+src+"']").each(processLazyPictureImg);
+            }
+        }
+
+        $('picture img[data-original],picture img[data-src],picture img[data-lazyload]')
+            .on('load', processLazyPictureImg)
+            .each(processLazyPictureImg);
+    });
+</script>
+<style>
+    picture.mfwebp source.lazyload,
+    picture.mfwebp source.lazy {background:none;content:none;}
+</style>

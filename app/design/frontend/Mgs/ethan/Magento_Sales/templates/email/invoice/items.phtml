@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php $_invoice = $block->getInvoice() ?>
+<?php $_order   = $block->getOrder() ?>
+<?php if ($_invoice && $_order) : ?>
+    <table class="email-items" style="width:100%;">
+        <thead>
+            <tr>
+                <th class="item-info" style="text-align:left; border-bottom:1px solid #ddd; font-size: 16px; width:72%; text-align: left; font-weight: bold; color: #1A1818;">
+                    <?= $block->escapeHtml(__('Items')) ?>
+                </th>
+                <th class="item-qty" style="width:10%; font-size: 16px; border-bottom:1px solid #ddd; text-align: center; font-weight: bold; color: #1A1818;">
+                    <?= $block->escapeHtml(__('Qty')) ?>
+                </th>
+                <th class="item-subtotal" style="width:18%; font-size: 16px; border-bottom:1px solid #ddd; text-align: center; font-weight: bold; color: #1A1818;">
+                    <?= $block->escapeHtml(__('Subtotal')) ?>
+                </th>
+            </tr>
+        </thead>
+        <?php foreach ($_invoice->getAllItems() as $_item) : ?>
+            <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+                <tbody>
+                    <tr>
+                        <td colspan="3">
+                            <?= $block->getItemHtml($_item) ?>
+                        </td>
+                    </td>
+                </tbody>
+            <?php endif; ?>
+        <?php endforeach; ?>
+
+        <tfoot class="order-totals" style="text-align: center;">
+            <?= $block->getChildHtml('invoice_totals') ?>
+        </tfoot>
+    </table>
+<?php endif; ?>
+<style type="text/css">
+    tfoot td { text-align: center; }
+</style>

@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\LayoutInterface">
+        <plugin name="Magefan_WebP_Plugin_Magento_Framework_View_LayoutInterface" sortOrder="10" type="Magefan\WebP\Plugin\Magento\Framework\View\LayoutInterface" disabled="false" />
+    </type>
+    <type name="Magento\Catalog\Block\Product\View\Gallery">
+        <plugin name="Magefan_WebP_Plugin_Magento_Catalog_Block_Product_View_Gallery" type="Magefan\WebP\Plugin\Magento\Catalog\Block\Product\View\Gallery" sortOrder="10" disabled="false" />
+    </type>
+    <type name="Magento\Framework\View\Element\AbstractBlock">
+        <!-- run after lazy load plugin -->
+        <plugin name="Magefan_WebP_Plugin_Magento_Framework_View_Element_AbstractBlock" type="Magefan\WebP\Plugin\Magento\Framework\View\Element\AbstractBlock" sortOrder="10000" disabled="false" />
+    </type>
+
+    <type name="MagicToolbox\MagicZoomPlus\Classes\MagicZoomPlusModuleCoreClass">
+        <plugin disabled="false" name="Magefan_WebP_Plugin_MagicToolbox_MagicZoomPlus_Classes_MagicZoomPlusModuleCoreClass" sortOrder="10" type="Magefan\WebP\Plugin\MagicToolbox\MagicZoomPlus\Classes\MagicZoomPlusModuleCoreClass"/>
+    </type>
+
+    <type name="Magento\ConfigurableProduct\Helper\Data">
+        <plugin disabled="false" name="Magefan_WebP_Plugin_Magento_ConfigurableProduct_Helper_Data" sortOrder="10" type="Magefan\WebP\Plugin\Magento\ConfigurableProduct\Helper\Data"/>
+    </type>
+
+    <type name="Magento\Swatches\Helper\Data">
+        <plugin disabled="false" name="Magefan_WebP_Plugin_Magento_Swatches_Helper_Data" sortOrder="10" type="Magefan\WebP\Plugin\Magento\Swatches\Helper\Data"/>
+    </type>
+
+    <type name="Magento\Framework\Controller\ResultInterface">
+        <plugin disabled="false" name="Magefan_WebP_Plugin_Magento_Framework_Controller_ResultInterface" sortOrder="-20" type="Magefan\WebP\Plugin\Magento\Framework\Controller\ResultInterface"/>
+    </type>
+    <type name="Swissup\Lightboxpro\Helper\Config">
+        <plugin disabled="false" name="Magefan_WebP_Plugin_Swissup_Lightboxpro_Helper_Config" sortOrder="10" type="Magefan\WebP\Plugin\Swissup\Lightboxpro\Helper\Config"/>
+    </type>
+</config>

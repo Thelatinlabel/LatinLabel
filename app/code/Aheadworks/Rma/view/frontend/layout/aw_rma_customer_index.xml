@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright 2020 aheadWorks. All rights reserved.
+See LICENSE.txt for license details.
+*/
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <css src="Aheadworks_Rma::css/style.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <action method="setCssClass">
+                <argument name="cssClass" xsi:type="string">aw-rma__title</argument>
+            </action>
+            <block class="Magento\Framework\View\Element\Template" name="aw_rma.customer.rma.newbutton"
+                   template="Aheadworks_Rma::customer/request/newbutton.phtml" />
+            <block class="Aheadworks\Rma\Block\Customer\Request\ListRequest" name="aw_rma.customer.rma.list" cacheable="false" />
+        </referenceContainer>
+    </body>
+</page>

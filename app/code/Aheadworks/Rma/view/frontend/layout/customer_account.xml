@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright 2020 aheadWorks. All rights reserved.
+See LICENSE.txt for license details.
+*/
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Aheadworks_Rma::css/style.css"/>
+    </head>
+    <body>
+        <referenceContainer name="sidebar.main">
+            <!-- <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-aw-rma-link">
+                <arguments>
+                    <argument name="path" xsi:type="string">aw_rma/customer</argument>
+                    <argument name="label" xsi:type="string">My Returns</argument>
+                    <argument name="sortOrder" xsi:type="number">240</argument>
+                </arguments>
+            </block> -->
+        </referenceContainer>
+    </body>
+</page>

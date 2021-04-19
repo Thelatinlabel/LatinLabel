@@ -1,0 +1,27 @@
+<script type="text/javascript">
+    requirejs(['jquery', 'mgs_quickview'],
+            function ($, quickview) {
+                $(document).ready(function () {
+                    $('.mgs-quickview').bind('click', function () {
+                        var prodUrl = $(this).attr('data-quickview-url');
+                        if (prodUrl.length) {
+                            quickview.displayContent(prodUrl);
+                        }
+                    });
+                    
+                    checkPrevPage();
+                    function checkPrevPage(){
+                        if(jQuery('.prev-url').length > 0){
+                            var setUrl = localStorage.getItem('prevUrl');
+                            if(setUrl != undefined){
+                                jQuery('.prev-url').attr('href',setUrl);
+                            }
+                        }
+                        if(jQuery('.prev-url').length == 0){		
+                            var getUrl = location.href;
+                            localStorage.setItem('prevUrl',getUrl);
+                        }
+                    }
+                });
+            });
+</script>

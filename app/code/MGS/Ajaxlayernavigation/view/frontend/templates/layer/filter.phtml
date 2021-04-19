@@ -1,0 +1,34 @@
+<?php $helper = $this->helper('\Magento\Catalog\Helper\Data'); ?>
+<?php //$activeFilters = $block->getLayer()->getState()->getFilters(); ?>
+<ol class="items">
+    <?php foreach ($filterItems as $filterItem): ?>
+        <?php
+            $checked = ''; 
+            if(!$filterItem->getActive()) {
+                $url = $filterItem->getUrl();
+            } else {
+                $checked = 'checked';
+                $url = $filterItem->getRemoveUrl();
+            }
+             
+        ?>
+        <?php //if($filterItem->getName()=='Price' && )?>
+        <?php if(!(isset($_GET['price']) && $filterItem->getName()=='Price')) { ?>
+        <li class="item <?php if($filterItem->getName() == 'Price'){ echo 'hide'; }?>">
+            <div class="mgs-filter-item-checkbox">
+                <a href="<?php echo $block->escapeUrl($url) ?>">
+                    <input type="checkbox" class="mgs-layered-checkbox" <?php echo $checked ?>>
+                    <div class="mgs-content"></div>
+                </a>
+            </div>
+            <a class="mgs-ajax-layer-item" href="<?php echo $block->escapeUrl($url) ?>">
+                <?php /* @escapeNotVerified */ echo $filterItem->getLabel() ?>
+                <?php /*if (!$filterItem->getActive() && $filterItem->getCount() > 0): ?>
+                    <span class="count mgs-option-count">
+                    <?php /* @escapeNotVerified */ /*echo  $filterItem->getCount() ?></span>
+                <?php endif; */ ?>
+            </a>
+        </li>
+        <?php } ?>
+    <?php endforeach ?>
+</ol>

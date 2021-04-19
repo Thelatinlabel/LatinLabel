@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+		<referenceBlock name="product.info.main">
+			<block class="Magento\Catalog\Block\Product\View" name="product.variants" template="Mobikasa_Variants::product/view/variants.phtml"/>
+			<block class="Magento\Catalog\Block\Product\View" name="product.extra.info" template="Mobikasa_Variants::product/view/extra-info.phtml"/>
+			<block class="Magento\Catalog\Block\Product\View" name="product.custom.title" template="Mobikasa_Variants::product/view/custom-title.phtml"/>
+		</referenceBlock>
+
+		<referenceContainer name="content.aside">
+            <block class="Magento\Catalog\Block\Product\View" name="product.custom.data" template="Mobikasa_Variants::product/view/custom-data.phtml"/>
+        </referenceContainer>
+
+		<referenceBlock name="product.info.options.wrapper">
+				<block class="Magento\Catalog\Block\Product\View" name="product.custom.qty" template="Mobikasa_Variants::product/view/custom-qty.phtml" before="-"/>
+		</referenceBlock>
+		<move element="product.variants" destination="product.info.main" after="product.info.price" />
+		<move element="product.extra.info" destination="product.info.main" after="-" />
+		<move element="product.custom.title" destination="product.info.main" after="product.brand.name" />
+		<move element="product.custom.data" destination="content.aside" after="-" />
+		
+	</body>
+</page>

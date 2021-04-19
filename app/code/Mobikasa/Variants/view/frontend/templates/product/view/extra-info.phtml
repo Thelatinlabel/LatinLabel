@@ -1,0 +1,70 @@
+<?php
+// @codingStandardsIgnoreFile
+
+/** 
+ * @var $block \Magento\Catalog\Block\Product\View
+ */
+$objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+$registry = $objectManager->get('\Magento\Framework\Registry');
+$_product = $registry->registry('current_product');
+?>
+<?php 
+$baseUrl =  $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getBaseUrl(); 
+$FormKey = $objectManager->get('Magento\Framework\Data\Form\FormKey'); 
+
+if($_product->getTypeId() == "configurable"){
+	$productTypeInstance = $objectManager->get('Magento\ConfigurableProduct\Model\Product\Type\Configurable');
+	$productAttributeOptions = $productTypeInstance->getConfigurableAttributesAsArray($_product);
+}
+?>
+<div class="_addtowishlist">
+
+<form id="form_wishlist" action="<?php echo $baseUrl; ?>/wishlist/index/add/" method="post">
+	<input type="hidden" name="product" value="<?php echo $_product->getId(); ?>">
+	<!-- <input type="hidden" name="uenc" value="aHR0cDovL3RoZWxhdGlubGFiZWwvcmV2ZXJzaWJsZS1vbmUtc2hvdWxkZXItdG9w"> -->
+	<?php 
+	if($_product->getTypeId() == "configurable"){
+	foreach ($productAttributeOptions as $key => $value) {  ?>
+		<input type="hidden" class="wish_super_attribute<?php echo $value['attribute_id']; ?>" name="super_attribute[<?php echo $value['attribute_id']; ?>]" value="">
+	<?php } 
+	}
+	?>
+	<input type="hidden" class="wish_qty" name="qty" value="1">
+	<input type="hidden" class="wish_form_key" name="form_key" value="<?php echo $FormKey->getFormKey(); ?>">
+	<span class="icomooon-latin-wishlist" aria-hidden="true"></span>
+	<input type="submit" id="btn-wishlist" value="Add to WishList" disabled="disabled">
+</form>
+</div>
+
+<div class="catalog-attr">
+	<?php if(!empty($_product->getDescription())){ ?>
+		<div class="catalog-attr-head">Product Details <i class="fa fa-plus"></i></div>
+		<div class="catalog-attr-content"><?php echo $_product->getDescription(); ?></div>
+	<?php } ?>	
+	<div class="catalog-attr-head">Shipping & Returns <i class="fa fa-plus"></i></div>
+	<div class="catalog-attr-content">
+	<?php
+		if(empty($_product->getSupport())){
+			 echo $this->getLayout()
+		            ->createBlock('Magento\Cms\Block\Block')
+		            ->setBlockId('pdp-shipping-and-returns')
+		            ->toHtml(); 
+			}else{
+				echo $_product->getSupport();
+			}
+	?>
+	</div>
+	<div class="catalog-attr-head">Support <i class="fa fa-plus"></i></div>
+	<div class="catalog-attr-content">
+	<?php 
+		if(empty($_product->getShippingReturns())){
+			echo $this->getLayout()
+	            ->createBlock('Magento\Cms\Block\Block')
+	            ->setBlockId('pdp-support')
+	            ->toHtml();
+	        }else{
+	        	echo $_product->getShippingReturns();
+	        }    
+    ?>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+{
+    "name": "mobikasa/module-days",
+    "description": "Adding customer phones number on registeration",
+    "type": "magento2-module",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Mage2Gen",
+            "email": "info@mage2gen.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Mobikasa\\Days\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}
