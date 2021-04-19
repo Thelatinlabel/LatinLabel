@@ -1,0 +1,1 @@
+/var/www/Thelatinlabel-magento/app/design/frontend/Mgs/ethan/web/js/custom.js

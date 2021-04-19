@@ -1,0 +1,1 @@
+/var/www/Thelatinlabel-magento/app/code/MGS/QuickView/view/frontend/web/js/mgs_quickview.js

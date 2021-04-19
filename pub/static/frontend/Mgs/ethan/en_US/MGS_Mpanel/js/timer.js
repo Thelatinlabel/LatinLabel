@@ -1,0 +1,1 @@
+/var/www/Thelatinlabel-magento/app/code/MGS/Mpanel/view/frontend/web/js/timer.js

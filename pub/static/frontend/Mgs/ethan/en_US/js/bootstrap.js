@@ -1,0 +1,1 @@
+/var/www/Thelatinlabel-magento/app/design/frontend/Mgs/mgsblank/web/js/bootstrap.js

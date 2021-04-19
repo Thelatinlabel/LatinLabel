@@ -1,0 +1,1 @@
+/var/www/Thelatinlabel-magento/lib/web/mage/apply/main.js

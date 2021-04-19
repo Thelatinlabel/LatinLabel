@@ -1,0 +1,1 @@
+/var/www/Thelatinlabel-magento/app/design/frontend/Mgs/ethan/Magento_Customer/web/js/customer-data.js
