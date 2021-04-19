@@ -1,0 +1,4 @@
+Array
+(
+    [token] => vvssdvvv
+)
